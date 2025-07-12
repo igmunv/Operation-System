@@ -20,7 +20,7 @@
   сценарий для сборки ядра и его запуска
 
 ## 🚀 Как запустить ОС
-1. Установка зависимостей: `texinfo` `build-essential` `xorriso` `bison` `flex` `make` `sudo` `qemu-system-x86_64`
+1. Установка зависимостей: `texinfo` `build-essential` `xorriso` `bison` `flex` `make` `sudo` `qemu-system-x86_64` `nasm`
 2. Запуск sh скрипта для сборки компилятора от имени root: `toolchain/install.sh`
 3. Компилятор установится по пути: `/opt/i386-elf`
 4. Перезайти в сессию
