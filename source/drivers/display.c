@@ -11,13 +11,16 @@ void display_cursor_update(){
     outb(0x3D5, display_cursor_location);
 }
 
+
+
+
 void display_new_line(){
     display_cursor_pos_y++;
     display_cursor_pos_x = 0;
     display_cursor_update();
 }
 
-void display_print_symbol(unsigned char symbol, int x, int y, int color){
+void display_print_symbol(unsigned char symbol, char x, char y, char font_color, char bkgr_color){
 	unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
 	video_mem += (80 * y + x) * 2;
     video_mem[0] = symbol;
