@@ -20,11 +20,21 @@ void display_new_line(){
     display_cursor_update();
 }
 
-void display_print_symbol(unsigned char symbol, char x, char y, char font_color, char bkgr_color){
+void display_print_symbol(unsigned char symbol, char x, char y, char font_color){
 	unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
 	video_mem += (80 * y + x) * 2;
     video_mem[0] = symbol;
-    video_mem[1] = color;
+    video_mem[1] = font_color;
+    video_mem += 2;
+}
+
+void display_print_symbol1(unsigned char symbol, char x, char y, char font_color, char bkgr_color){
+	unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
+	video_mem += (80 * y + x) * 2;
+    video_mem[0] = symbol;
+    video_mem[1] = font_color;
+    bkgr_color = bkgr_color << 4;
+    video_mem[1] = video_mem[1] | bkgr_color;
     video_mem += 2;
 }
 

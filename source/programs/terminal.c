@@ -45,9 +45,11 @@ void terminal_command_handler(){
 
     unsigned char cmd_help[5] = "help";
     if (is_str_equally(&cmd_help, get_str_len(&cmd_help), &terminal_buffer)){
-        display_print_symbol('h', test, 10, 20);
+        display_print_symbol1('h', test, 10, 0, 15);
         test++;
     }
+
+
 
 }
 
