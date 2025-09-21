@@ -48,8 +48,10 @@ void terminal_command_handler(){
 
     unsigned char cmd_help[5] = "help";
     unsigned char cmd_clear[6] = "clear";
+    unsigned char cmd_uptime[7] = "uptime";
+    unsigned char cmd_poweroff[9] = "poweroff";
 
-    char* cmd_help_text = "Available commands:\n| help\n| clear";
+    char* cmd_help_text = "Available commands:\n| help\n| clear\n| uptime\n| poweroff";
 
     if (is_str_equally(&cmd_clear, get_str_len(&cmd_clear), &terminal_buffer)){
         display_clear();
@@ -57,9 +59,23 @@ void terminal_command_handler(){
     }
     else{
          if (is_str_equally(&cmd_help, get_str_len(&cmd_help), &terminal_buffer)){
-
             display_print(cmd_help_text, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
         }
+
+        else if (is_str_equally(&cmd_uptime, get_str_len(&cmd_uptime), &terminal_buffer)){
+            long uptime_second = ticks / 1000;
+            unsigned char uptime_second_str[50];
+            itos(uptime_second, &uptime_second_str);
+            display_print(uptime_second_str, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+            display_print("second", 20, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+        }
+        else if (is_str_equally(&cmd_poweroff, get_str_len(&cmd_poweroff), &terminal_buffer)){
+            outw(0x604, 0x2000);
+        }
+        else {
+            display_print("Command not found!", 0, display_cursor_pos_y, 4, terminal_default_bckd_color);
+        }
+
         limit_y_top = display_cursor_pos_y;
         display_new_line();
     }
@@ -70,7 +86,7 @@ void terminal_enter_key_handler(){
     terminal_buffer[terminal_ptr] = '\0';
     terminal_ptr = (terminal_ptr+1) % TERMINAL_BUFFER_SIZE;
     display_new_line();
-    terminal_command_handler();
+    if (terminal_ptr > 1) terminal_command_handler();
     terminal_buffer_clear();
 
 }
@@ -100,15 +116,23 @@ void terminal_other_key_handler(unsigned char scancode){
     }
 }
 
-
-void test(){
-    unsigned char str[50];
-
-    itos(terminal_ptr, &str);
-
-    display_print(str, 0, 24, 0, 7);
+void terminal_state_line_print(){
+    for(char i = 0; i < 80; i++){
+        display_print_symbol('\0', i, 24, 0, 7);
+    }
 }
 
+void test(){
+    terminal_state_line_print();
+    unsigned char str[50];
+    unsigned char ticks_str[50];
+    itos(terminal_ptr, &str);
+    itos(ticks, &ticks_str);
+
+    display_print(str, 0, 24, 0, 7);
+
+    display_print(ticks_str, 40, 24, 0, 7);
+}
 
 void terminal_scancode_handler(unsigned char scancode){
     if (scancode == 28){ // Enter
@@ -134,12 +158,6 @@ void terminal_keyboard_listen(){
             keyboard_buffer_tail = (keyboard_buffer_tail+1) % KEYBOARD_BUFFER_SIZE;
         }
         sleep(10);
-    }
-}
-
-void terminal_state_line_print(){
-    for(char i = 0; i < 80; i++){
-        display_print_symbol('\0', i, 24, 0, 7);
     }
 }
 

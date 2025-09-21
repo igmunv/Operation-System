@@ -2,7 +2,7 @@
 #define PIT_CH0  0x40
 #define PIT_INPUT_FREQ 1193182UL
 
-volatile unsigned long long ticks = 0;
+volatile unsigned long ticks = 0;
 
 void PIT_init(unsigned int freq_hz) {
     unsigned int divisor = (unsigned int)(PIT_INPUT_FREQ / freq_hz); // 1193182 / freq

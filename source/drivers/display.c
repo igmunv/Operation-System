@@ -14,7 +14,7 @@ void display_cursor_update(){
 }
 
 void display_new_line(){
-    if (display_cursor_pos_y == display_limit_y_bottom){
+    if (display_cursor_pos_y >= display_limit_y_bottom){
         display_cursor_pos_y = 0;
         display_clear();
     }

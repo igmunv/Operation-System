@@ -1,4 +1,3 @@
-
 unsigned char itos_table(char i){
     switch (i){
         case 0: return '0';
@@ -19,9 +18,11 @@ void string_turn_over(unsigned char* string, short size, unsigned char* result){
     for (int i = 0; i < size; i++){
         result[i] = string[size-i-1];
     }
+    result[size] = '\0';
 }
 
 void itos(long i, unsigned char* ret){
+    long j = i;
     unsigned char result[21];
     char r_ptr = 0;
 
@@ -34,26 +35,30 @@ void itos(long i, unsigned char* ret){
     char string[20];
     char s_ptr = 0;
 
-    if (i < 0){
-        i = i * -1;
-        result[0] = '-';
-        r_ptr++;
-    }
+    if (i < 0) i = i * -1;
 
     while (i){
         int p = (long)(i % 10);
         i = (long)(i / 10);
         unsigned char s = itos_table(p);
+
         string[s_ptr] = s;
         s_ptr++;
     }
 
-    unsigned char str_to[20];
-    string_turn_over(&string, s_ptr+1, &str_to);
+    string_turn_over(&string, s_ptr, &result);
 
-    for (char f = 0; f < 20; f++){
-        result[f+1] = str_to[f];
+    if (j < 0){
+        ret[0] = '-';
+
+        for (int f = 0; f < 21; f++){
+            ret[f+1] = result[f];
+        }
     }
-    ret = result;
+    else{
+         for (int f = 0; f < 21; f++){
+            ret[f] = result[f];
+        }
+    }
     return;
 }
