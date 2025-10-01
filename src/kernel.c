@@ -1,4 +1,11 @@
-asm("jmp kmain");
+
+
+__attribute__((section(".multiboot")))
+const unsigned int multiboot_header[] = {
+	0x1BADB002,
+	0,
+	-(0x1BADB002)
+};
 
 // kernel
 #include "asm.c"
@@ -13,7 +20,11 @@ asm("jmp kmain");
 // programs
 #include "programs/terminal.c"
 
+extern void gdt_init();
+
 void kmain(void){
+
+	gdt_init();
 
     IDT_disable();
     PIC_remap();

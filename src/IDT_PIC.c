@@ -23,15 +23,6 @@ typedef void (*intr_handler)();
 extern void tick_handler();
 extern void asm_keyboard_handler();
 
-static inline void idt_set(int n, void* h){
-    unsigned int a = (unsigned int)h;
-    IDT_table[n].low_bits = a & 0xFFFF;
-    IDT_table[n].segm_sel = 0x08;
-    IDT_table[n].always0 = 0;
-    IDT_table[n].flags = 0x8E;
-    IDT_table[n].high_bits = (a >> 16);
-}
-
 void IDT_reg_handler(int num, unsigned short segm_sel, unsigned short flags, intr_handler handler)
 {
 	unsigned int handler_addr = (unsigned int) handler;
@@ -69,9 +60,6 @@ void IDT_handlers_init(){
 static inline void io_wait(void){ outb(0x80, 0); }
 
 void PIC_remap(){
-	unsigned char a1 = inb(0x21);
-    unsigned char a2 = inb(0xA1);
-
     outb(0x20, 0x11); io_wait();   // ICW1
     outb(0xA0, 0x11); io_wait();
 

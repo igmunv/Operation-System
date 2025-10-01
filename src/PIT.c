@@ -19,7 +19,7 @@ void PIT_init(unsigned int freq_hz) {
 
 void tick(){
 	ticks++;
-	outb(PIC1_PORT, 0x20);
+	outb(0x20, 0x20);
 }
 
 void sleep(int ms){

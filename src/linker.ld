@@ -2,6 +2,9 @@ ENTRY(kmain)
 
 SECTIONS
 {
+  .multiboot :{
+    *(.multiboot)
+  }
   . = 0x5000;
     .os_data : {
         *(.os_data)

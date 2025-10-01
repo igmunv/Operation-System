@@ -58,7 +58,7 @@ void keyboard_handler(){
         if (is_special_key) keyboard_special_key_handler(scancode & 0b01111111, 1);
         else keyboard_scancode_add_in_buffer(scancode);
     }
-    outb(PIC1_PORT, 0x20);
+    outb(0x20, 0x20);
 }
 
 char keyboard_scancode_to_ascii(unsigned char scancode, unsigned char shift_state){ // возвращает символ ASCII по таблице
