@@ -20,7 +20,7 @@ mkdir "$BINUTILS_TAR_FILENAME-build"
 cd "$BINUTILS_TAR_FILENAME-build"
 ../$BINUTILS_TAR_FILENAME/configure --target=$TARGET --prefix=$PREFIX --enable-interwork --enable-multilib --disable-nls --disable-werror
 make -j 4 all
-sudo make install
+make install
 cd ..
 
 # gcc
@@ -34,7 +34,9 @@ cd "$GCC_TAR_FILENAME-build"
 ../$GCC_TAR_FILENAME/configure --target=$TARGET --prefix=$PREFIX --disable-nls --enable-languages=c --enable-interword --enable-multilib
 make -j 4 all-gcc
 make -j 4 all-target-libgcc
-sudo make install-gcc
-sudo make install-target-libgcc
+make install-gcc
+make install-target-libgcc
 
 echo "export PATH=\$PATH:$PREFIX/bin" >> ~/.bashrc
+
+echo "Success!"

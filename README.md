@@ -42,7 +42,7 @@
 5. Компиляция ядра и запуск: `make`
      
 ### Если будете собирать компилятор сами:
-1. Установка зависимостей: `sudo make nasm gcc xorriso qemu-system texinfo build-essential bison flex`
+1. Установка зависимостей: `make nasm gcc xorriso qemu-system texinfo build-essential bison flex`
 2. Запуск sh скрипта для сборки компилятора от имени root: `toolchain/build/install.sh`
 3. Компилятор установится по пути: `/opt/i386-elf`
 4. Добавить компилятор в PATH: `export PATH=$PATH:/opt/i386-elf`
