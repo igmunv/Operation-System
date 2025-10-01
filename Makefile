@@ -1,4 +1,5 @@
 all:
+	mkdir -p ./output
 	$(MAKE) build
 	$(MAKE) make_iso
 	$(MAKE) run
