@@ -34,6 +34,8 @@ short get_str_len(unsigned char* str){
     return n;
 }
 
+
+// in string.c
 char is_str_equally(unsigned char* str1, short str1_len, unsigned char* str2){
     for (int n = 0; n <= (int)str1_len; n++){
         unsigned char str1_sym = str1[n];
@@ -50,6 +52,8 @@ void terminal_command_handler(){
     unsigned char cmd_clear[6] = "clear";
     unsigned char cmd_uptime[7] = "uptime";
     unsigned char cmd_poweroff[9] = "poweroff";
+
+    unsigned char cmd_adr[4] = "adr";
 
     char* cmd_help_text = "Available commands:\n| help\n| clear\n| uptime\n| poweroff";
 
@@ -71,6 +75,32 @@ void terminal_command_handler(){
         }
         else if (is_str_equally(&cmd_poweroff, get_str_len(&cmd_poweroff), &terminal_buffer)){
             outw(0x604, 0x2000);
+        }
+        else if (is_str_equally(&cmd_adr, get_str_len(&cmd_adr), &terminal_buffer)){
+
+
+            for (int i = 0; i < 10000; i++){
+
+                char* p = (char*)i;
+                char b = *p;
+
+                unsigned char phex[9];
+                struct byte_split_struct bhex;
+
+                phex[8] = '\0';
+                ptox(p, &phex);
+                display_print(phex, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+
+                btox(b, &bhex);
+                display_print_symbol(bhex.high, 10, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+                display_print_symbol(bhex.low, 11, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+
+                display_print_symbol(b, 14, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+
+                display_new_line();
+                sleep(1);
+            }
+
         }
         else {
             display_print("Command not found!", 0, display_cursor_pos_y, 4, terminal_default_bckd_color);
