@@ -14,6 +14,8 @@ const unsigned int multiboot_header[] = {
 // drivers
 #include "drivers/keyboard.c"
 #include "drivers/display.c"
+// api
+#include "api/api.c"
 // other libs
 #include "memory.c"
 #include "string.c"
@@ -31,6 +33,7 @@ void kmain(void){
     IDT_handlers_init();
     IDT_load();
     PIT_init(1000);
+	api_init();
 	IDT_enable();
 
 	terminal_init();

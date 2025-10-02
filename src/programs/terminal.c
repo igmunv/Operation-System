@@ -25,6 +25,22 @@ void terminal_buffer_clear(){
     terminal_ptr = 0;
 }
 
+void terminal_new_line(){
+    in_ah(1); // type command
+    syscall_display();
+}
+
+void terminal_clear(){
+    in_ah(3); // type command
+    syscall_display();
+}
+
+void terminal_delete_current_symbol(char offset){
+    in_ah(5); // type command
+    in_dh(offset);
+    syscall_display();
+}
+
 short get_str_len(unsigned char* str){
     short n = 0;
     while(*str){
@@ -58,8 +74,7 @@ void terminal_command_handler(){
     char* cmd_help_text = "Available commands:\n| help\n| clear\n| uptime\n| poweroff";
 
     if (is_str_equally(&cmd_clear, get_str_len(&cmd_clear), &terminal_buffer)){
-        display_clear();
-        terminal_state_line_print();
+        terminal_clear();
     }
     else{
          if (is_str_equally(&cmd_help, get_str_len(&cmd_help), &terminal_buffer)){
@@ -76,38 +91,12 @@ void terminal_command_handler(){
         else if (is_str_equally(&cmd_poweroff, get_str_len(&cmd_poweroff), &terminal_buffer)){
             outw(0x604, 0x2000);
         }
-        else if (is_str_equally(&cmd_adr, get_str_len(&cmd_adr), &terminal_buffer)){
-
-
-            for (int i = 0; i < 10000; i++){
-
-                char* p = (char*)i;
-                char b = *p;
-
-                unsigned char phex[9];
-                struct byte_split_struct bhex;
-
-                phex[8] = '\0';
-                ptox(p, &phex);
-                display_print(phex, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-
-                btox(b, &bhex);
-                display_print_symbol(bhex.high, 10, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-                display_print_symbol(bhex.low, 11, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-
-                display_print_symbol(b, 14, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-
-                display_new_line();
-                sleep(1);
-            }
-
-        }
         else {
             display_print("Command not found!", 0, display_cursor_pos_y, 4, terminal_default_bckd_color);
         }
 
         limit_y_top = display_cursor_pos_y;
-        display_new_line();
+        terminal_new_line();
     }
 }
 
@@ -125,7 +114,7 @@ void terminal_backspace_key_handler(){
     while (1){
         if (display_cursor_pos_x == 0 && display_cursor_pos_y - 1 == limit_y_top) break;
         else{
-            display_delete_current_symbol(-1);
+            terminal_delete_current_symbol(-1);
             terminal_ptr--;
             terminal_buffer[terminal_ptr] = '\0';
             unsigned char symbol = display_get_current_symbol(-1);
