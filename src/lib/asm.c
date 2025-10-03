@@ -28,6 +28,10 @@ extern void in_bx(short word);
 extern void in_cx(short word);
 extern void in_dx(short word);
 
+// Write in 32-bit registers
+extern void in_ebx(int dword);
+extern void in_esi(int dword);
+
 // Read from 8-bit registers
 extern unsigned char get_ah();
 extern unsigned char get_al();
@@ -43,6 +47,10 @@ extern short get_ax();
 extern short get_bx();
 extern short get_cx();
 extern short get_dx();
+
+// Read from 32-bit registers
+extern int get_ebx();
+extern int get_esi();
 
 // Clear 8-bit registers
 extern void clear_ah();

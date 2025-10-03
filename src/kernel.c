@@ -19,6 +19,7 @@ const unsigned int multiboot_header[] = {
 #include "lib/memory.c"
 #include "lib/string.c"
 #include "lib/time.c"
+#include "lib/io.c"
 // programs
 #include "programs/terminal.c"
 
@@ -26,18 +27,21 @@ extern void gdt_init();
 
 void kmain(void){
 
+	// GDT table init
 	gdt_init();
 
     interrupt_disable();
 
-
+	// Add interrupt, handlers. Init
 	drivers_init();
 	api_init();
 
+	// IDT setup
 	PIC_remap();
 	IDT_load();
 
 	interrupt_enable();
+
 
 	terminal_init();
 

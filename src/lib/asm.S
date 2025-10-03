@@ -5,6 +5,8 @@ global get_ax, get_bx, get_cx, get_dx
 global clear_ah, clear_al, clear_bh, clear_bl, clear_ch, clear_cl, clear_dh, clear_dl
 global clear_ax, clear_bx, clear_cx, clear_dx
 
+global get_ebx, in_ebx, get_esi, in_esi
+
 section .text
 
 ; Write 8-bit registers
@@ -59,6 +61,16 @@ in_dx:
     mov dx, [esp+4]
     ret
 
+; Write 32-bit registers
+
+in_ebx:
+    mov ebx, [esp+4]
+    ret
+
+in_esi:
+    mov esi, [esp+4]
+    ret
+
 ; Read 8-bit registers
 
 get_ah:
@@ -109,6 +121,16 @@ get_cx:
 
 get_dx:
     movzx eax, dx
+    ret
+
+; Read 32-bit registers
+
+get_ebx:
+    mov eax, ebx
+    ret
+
+get_esi:
+    mov eax, esi
     ret
 
 ; Clear 8-bit registers

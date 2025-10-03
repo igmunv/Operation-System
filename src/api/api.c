@@ -36,8 +36,9 @@ void api_display_handler(){
     }
 
     else if (command_type == 4){
-        offset = get_bx();
-        display_get_current_symbol(offset);
+        offset = get_cx();
+        unsigned char* result = get_ebx();
+        *result = display_get_current_symbol(offset);
     }
 
     else if (command_type == 5){

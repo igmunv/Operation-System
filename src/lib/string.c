@@ -94,6 +94,16 @@ short strlen(char* string){
     return len;
 }
 
+char is_str_equally(unsigned char* str1, short str1_len, unsigned char* str2){
+    for (short n = 0; n <= str1_len; n++){
+        unsigned char str1_sym = str1[n];
+        unsigned char str2_sym = str2[n];
+        unsigned char xor = str1_sym ^ str2_sym;
+        if (xor != 0 ) return 0;
+    }
+    return 1;
+}
+
 char smtoi(char symbol){
     switch (symbol){
         case '0': return 0;

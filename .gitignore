@@ -1,3 +1,4 @@
 output/
 *.elf
 **.kate-swp
+**.drawio.bkp
