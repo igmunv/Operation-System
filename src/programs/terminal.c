@@ -17,6 +17,12 @@ char limit_y_top = 0;
 char terminal_default_font_color = 7;
 char terminal_default_bckd_color = 0;
 
+void syscall_display(unsigned char command_type){
+    clear_ah();
+    in_ah(command_type);
+    asm("int $34":::);
+}
+
 void terminal_buffer_clear(){
     terminal_buffer[TERMINAL_BUFFER_SIZE+1] = '\0';
     for(unsigned short i = 0; i < TERMINAL_BUFFER_SIZE; i++){
@@ -26,19 +32,25 @@ void terminal_buffer_clear(){
 }
 
 void terminal_new_line(){
-    in_ah(1); // type command
-    syscall_display();
+    syscall_display(1);
 }
 
 void terminal_clear(){
-    in_ah(3); // type command
-    syscall_display();
+    syscall_display(3);
 }
 
-void terminal_delete_current_symbol(char offset){
-    in_ah(5); // type command
-    in_dh(offset);
-    syscall_display();
+void terminal_delete_current_symbol(short offset){
+    in_bx(offset);
+    syscall_display(5);
+}
+
+void terminal_print_symbol(){
+    in_bl('s');
+    in_bh(10);
+    in_cl(10);
+    in_ch(5);
+    in_dl(10);
+    syscall_display(0);
 }
 
 short get_str_len(unsigned char* str){
@@ -78,7 +90,8 @@ void terminal_command_handler(){
     }
     else{
          if (is_str_equally(&cmd_help, get_str_len(&cmd_help), &terminal_buffer)){
-            display_print(cmd_help_text, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+            //display_print(cmd_help_text, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+            terminal_print_symbol();
         }
 
         else if (is_str_equally(&cmd_uptime, get_str_len(&cmd_uptime), &terminal_buffer)){
@@ -141,12 +154,12 @@ void terminal_state_line_print(){
     }
 }
 
-void test(){
+void test(short i){
     terminal_state_line_print();
     unsigned char str[50];
     unsigned char ticks_str[50];
     itos(terminal_ptr, &str);
-    itos(ticks, &ticks_str);
+    itos((long)i, &ticks_str);
 
     display_print(str, 0, 24, 0, 7);
 
@@ -155,7 +168,7 @@ void test(){
 
 void terminal_scancode_handler(unsigned char scancode){
     if (scancode == 28){ // Enter
-        test();
+
         terminal_enter_key_handler();
     }
     else if (scancode == 14){ // BackSpace

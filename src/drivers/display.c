@@ -64,19 +64,21 @@ void display_clear(){
     display_cursor_update();
 }
 
-unsigned char display_get_current_symbol(char offset){ // offset - смещение, 1 = смещение на единицу вперёд -1 = смещение назад
+unsigned char display_get_current_symbol(short offset){ // offset - смещение, 1 = смещение на единицу вперёд -1 = смещение назад
     unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
 	video_mem += (80 * (display_cursor_pos_y) + (display_cursor_pos_x)) * 2;
     video_mem += 2 * offset;
     return video_mem[0];
 }
 
-void display_delete_current_symbol(char offset){
+void display_delete_current_symbol(short offset){
     unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
 	video_mem += (80 * (display_cursor_pos_y) + (display_cursor_pos_x)) * 2;
     video_mem += 2 * offset;
     video_mem[0] = 0;
     video_mem[1] = 7;
+
+
 
     if (display_cursor_pos_x == 0){
         if (display_cursor_pos_y > 0){

@@ -9,20 +9,18 @@ void api_display_handler(){
     unsigned char y = 0;
     unsigned char font_color = 0;
     unsigned char background_color = 0;
-    char offset = 0;
+    short offset = 0;
 
-    asm("movb %%ah, %0" : "=r"(command_type) : :);
+    command_type = get_ah();
 
     // Print symbol
     if (command_type == 0){
-        symbol = get_al();
+        symbol = get_bl();
         x = get_bh();
-        y = get_bl();
+        y = get_cl();
         font_color = get_ch();
-        background_color = get_cl();
-
+        background_color = get_dl();
         display_print_symbol(symbol, x, y, font_color, background_color);
-
     }
 
     else if (command_type == 1){
@@ -38,12 +36,12 @@ void api_display_handler(){
     }
 
     else if (command_type == 4){
-        offset = get_dh();
+        offset = get_bx();
         display_get_current_symbol(offset);
     }
 
     else if (command_type == 5){
-        offset = get_dh();
+        offset = get_bx();
         display_delete_current_symbol(offset);
     }
     outb(0x20, 0x20);
@@ -66,16 +64,12 @@ void api_registration_functions(){
     // BL - y
     // CH - font color
     // CL - background color
-    // DH - offset
+    // DX - offset
     //
 
     IDT_reg_handler(34, 0x08, 0x80 | 0x0E, api_asm_display_handler);
 
 
-}
-
-void syscall_display(){
-    asm("int $34":::);
 }
 
 void api_init(){
