@@ -1,51 +1,57 @@
 
 
-## INT 34: Display
+## `INT 0x22`: Display
 
-Регистр `AH` используется для обозначения типа команды
+##### Регистр `AH` используется для обозначения типа команды
 
-### Command type 0: Print symbol
+### Command `0x0`: Print symbol
 
-Description:
+#### Description:
+Выводит символ на экран
 
-
-Input:
+#### Input:
 - `BL` - Symbol
 - `BH` - X
 - `CL` - Y
 - `CH` - Font color
 - `DL` - Background color
 
-### Command type 1: New line
+### Command `0x1`: New line
 
-Description:
+#### Description:
+Переход на следующую строку
 
+### Command `0x2`: Cursor update
 
-### Command type 2: Cursor update
+#### Description:
+Обновить курсор
 
-Description:
+### Command `0x3`: Clear display
 
+#### Description:
+Очистить весь экран
 
-### Command type 3: Clear display
+### Command `0x4`: Get current symbol
 
-Description:
+#### Description:
+Получить текущий символ (можно задать смещение)
 
-
-### Command type 4: Get current symbol
-
-Description:
-
-
-Input:
+#### Input:
 - `BX` - Offset
 
-Output:
+#### Output:
 - `AL` - Symbol
 
-### Command type 5: Delete current symbol
+### Command `0x5`: Delete current symbol
 
-Description:
+#### Description:
+Удалить текущий символ (можно задать смещение)
 
-
-Input:
+#### Input:
 - `BX` - Offset
+
+
+## Планы:
+- sleep
+- get time
+

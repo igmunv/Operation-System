@@ -1,11 +1,11 @@
-global tick_handler, asm_keyboard_handler
-extern tick, keyboard_handler
+global asm_tick_handler, asm_keyboard_handler
+extern tick_handler, keyboard_handler
 
 section .text
 
-tick_handler:
+asm_tick_handler:
     pusha
-    call tick
+    call tick_handler
     popa
     iretd
 

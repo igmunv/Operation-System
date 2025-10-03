@@ -1,5 +1,3 @@
-
-
 __attribute__((section(".multiboot")))
 const unsigned int multiboot_header[] = {
 	0x1BADB002,
@@ -8,17 +6,19 @@ const unsigned int multiboot_header[] = {
 };
 
 // kernel
-#include "asm.c"
+#include "lib/asm.c"
 #include "IDT_PIC.c"
-#include "PIT.c"
 // drivers
+#include "drivers/drivers.c"
 #include "drivers/keyboard.c"
 #include "drivers/display.c"
+#include "drivers/PIT.c"
 // api
 #include "api/api.c"
-// other libs
-#include "memory.c"
-#include "string.c"
+// libs
+#include "lib/memory.c"
+#include "lib/string.c"
+#include "lib/time.c"
 // programs
 #include "programs/terminal.c"
 
@@ -28,13 +28,16 @@ void kmain(void){
 
 	gdt_init();
 
-    IDT_disable();
-    PIC_remap();
-    IDT_handlers_init();
-    IDT_load();
-    PIT_init(1000);
+    interrupt_disable();
+
+
+	drivers_init();
 	api_init();
-	IDT_enable();
+
+	PIC_remap();
+	IDT_load();
+
+	interrupt_enable();
 
 	terminal_init();
 

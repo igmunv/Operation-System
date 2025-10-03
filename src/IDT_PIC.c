@@ -1,5 +1,3 @@
-#define PIC1_PORT 0x20
-
 struct IDT_row
 {
     unsigned short low_bits;
@@ -20,17 +18,14 @@ struct IDT_ptr IDT_desc;
 
 typedef void (*intr_handler)();
 
-extern void tick_handler();
-extern void asm_keyboard_handler();
-
-void IDT_reg_handler(int num, unsigned short segm_sel, unsigned short flags, intr_handler handler)
+void IDT_reg_handler(int number, unsigned short segm_sel, unsigned short flags, intr_handler handler)
 {
 	unsigned int handler_addr = (unsigned int) handler;
-	IDT_table[num].low_bits = (unsigned short) (handler_addr & 0xFFFF);
-	IDT_table[num].segm_sel = segm_sel;
-	IDT_table[num].always0 = 0;
-	IDT_table[num].flags = flags;
-	IDT_table[num].high_bits = (unsigned short) (handler_addr >> 16);
+	IDT_table[number].low_bits = (unsigned short) (handler_addr & 0xFFFF);
+	IDT_table[number].segm_sel = segm_sel;
+	IDT_table[number].always0 = 0;
+	IDT_table[number].flags = flags;
+	IDT_table[number].high_bits = (unsigned short) (handler_addr >> 16);
 }
 
 void IDT_load()
@@ -41,20 +36,14 @@ void IDT_load()
     asm("lidt %0" : : "m" (IDT_desc));
 }
 
-void IDT_enable()
+void interrupt_enable()
 {
     asm("sti");
 }
 
-void IDT_disable()
+void interrupt_disable()
 {
     asm("cli");
-}
-
-void IDT_handlers_init(){
-	IDT_reg_handler(32, 0x08, 0x80 | 0x0E, tick_handler);
-    IDT_reg_handler(33, 0x08, 0x80 | 0x0E, asm_keyboard_handler);
-	//outb(PIC1_PORT + 1, 0xFF ^ 0x01);
 }
 
 static inline void io_wait(void){ outb(0x80, 0); }

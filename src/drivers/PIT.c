@@ -17,12 +17,7 @@ void PIT_init(unsigned int freq_hz) {
     outb(PIT_CH0, hi);
 }
 
-void tick(){
+void tick_handler(){
 	ticks++;
 	outb(0x20, 0x20);
-}
-
-void sleep(int ms){
-	unsigned long long ticks_local = ticks;
-	while ((ticks-ticks_local) <= ms){asm("hlt");}
 }

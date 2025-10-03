@@ -6,7 +6,7 @@ all:
 
 build:
 	# Assembler
-	nasm -f elf32 src/asm.S -o output/asm.o
+	nasm -f elf32 src/lib/asm.S -o output/asm.o
 	nasm -f elf32 src/IDT_handlers.S -o output/IDT_handlers.o
 	nasm -f elf32 src/gdt.S -o output/gdt.o
 	nasm -f elf32 src/api/api.S -o output/api.o

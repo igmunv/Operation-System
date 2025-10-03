@@ -44,13 +44,28 @@ void terminal_delete_current_symbol(short offset){
     syscall_display(5);
 }
 
-void terminal_print_symbol(){
-    in_bl('s');
-    in_bh(10);
-    in_cl(10);
-    in_ch(5);
-    in_dl(10);
+void terminal_print_symbol(unsigned char symbol, short x, short y, unsigned char font_color, unsigned char background_color){
+    in_bl(symbol);
+    in_bh(x);
+    in_cl(y);
+    in_ch(font_color);
+    in_dl(background_color);
     syscall_display(0);
+}
+
+void print(unsigned char* string, char x, char y, char font_color, char bkgr_color){
+    for (unsigned char* i = string; *i != '\0'; i++){
+        if (*i == '\n'){
+            y++;
+            x = 0;
+            display_cursor_pos_x = x;
+            display_cursor_pos_y = y;
+        }
+        else{
+            terminal_print_symbol(*i, x, y, font_color, bkgr_color);
+            x++;
+        }
+    }
 }
 
 short get_str_len(unsigned char* str){
@@ -91,21 +106,21 @@ void terminal_command_handler(){
     else{
          if (is_str_equally(&cmd_help, get_str_len(&cmd_help), &terminal_buffer)){
             //display_print(cmd_help_text, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-            terminal_print_symbol();
+
         }
 
         else if (is_str_equally(&cmd_uptime, get_str_len(&cmd_uptime), &terminal_buffer)){
             long uptime_second = ticks / 1000;
             unsigned char uptime_second_str[50];
             itos(uptime_second, &uptime_second_str);
-            display_print(uptime_second_str, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-            display_print("second", 20, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+            print(uptime_second_str, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+            print("second", 20, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
         }
         else if (is_str_equally(&cmd_poweroff, get_str_len(&cmd_poweroff), &terminal_buffer)){
             outw(0x604, 0x2000);
         }
         else {
-            display_print("Command not found!", 0, display_cursor_pos_y, 4, terminal_default_bckd_color);
+            print("Command not found!", 0, display_cursor_pos_y, 4, terminal_default_bckd_color);
         }
 
         limit_y_top = display_cursor_pos_y;
