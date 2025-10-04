@@ -1,3 +1,4 @@
+// GRUB header
 __attribute__((section(".multiboot")))
 const unsigned int multiboot_header[] = {
 	0x1BADB002,
@@ -23,13 +24,17 @@ const unsigned int multiboot_header[] = {
 // programs
 #include "programs/terminal.c"
 
+// ASM-functions
 extern void gdt_init();
 
+
+// Main
 void kmain(void){
 
 	// GDT table init
 	gdt_init();
 
+	// Ints disable
     interrupt_disable();
 
 	// Add interrupt, handlers. Init
@@ -40,11 +45,15 @@ void kmain(void){
 	PIC_remap();
 	IDT_load();
 
+	// Ints enable
 	interrupt_enable();
 
 
+	// - - Test - -
 	terminal_init();
 
+
+	// Endless loop
 	while(1)
 	{
 		asm("hlt");

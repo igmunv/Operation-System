@@ -1,10 +1,14 @@
 #define VIDEO_BUFFER_PTR (0xb8000)
 
-volatile unsigned short display_cursor_pos_x = 0;
-volatile unsigned short display_cursor_pos_y = 0;
+// Координаты курсора
+volatile unsigned short display_cursor_pos_x __attribute__((section(".os_data"))) = 0;
+volatile unsigned short display_cursor_pos_y __attribute__((section(".os_data"))) = 0;
 
+// Нижний лимит по y
 const char display_limit_y_bottom = 23;
 
+
+// Обновить курсор
 void display_cursor_update(){
     int display_cursor_location = display_cursor_pos_y * 80 + display_cursor_pos_x;
     outb(0x3D4, 14);
@@ -13,6 +17,8 @@ void display_cursor_update(){
     outb(0x3D5, display_cursor_location);
 }
 
+
+// Переход на новую (следующую) строку
 void display_new_line(){
     if (display_cursor_pos_y >= display_limit_y_bottom){
         display_cursor_pos_y = 0;
@@ -24,6 +30,8 @@ void display_new_line(){
     display_cursor_update();
 }
 
+
+// Вывести символ на экран
 void display_print_symbol(unsigned char symbol, char x, char y, char font_color, char bkgr_color){
 	unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
 	video_mem += (80 * y + x) * 2;
@@ -34,21 +42,8 @@ void display_print_symbol(unsigned char symbol, char x, char y, char font_color,
     video_mem += 2;
 }
 
-void display_print(unsigned char* string, char x, char y, char font_color, char bkgr_color){
-    for (unsigned char* i = string; *i != '\0'; i++){
-        if (*i == '\n'){
-            y++;
-            x = 0;
-            display_cursor_pos_x = x;
-            display_cursor_pos_y = y;
-        }
-        else{
-            display_print_symbol(*i, x, y, font_color, bkgr_color);
-            x++;
-        }
-    }
-}
 
+// Очистить весь экран
 void display_clear(){
     unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
     for (unsigned short y = 0; y < 25; y++){
@@ -64,6 +59,8 @@ void display_clear(){
     display_cursor_update();
 }
 
+
+// Получить текущий символ (можно со смещением)
 unsigned char display_get_current_symbol(short offset){
     unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
 	video_mem += (80 * (display_cursor_pos_y) + (display_cursor_pos_x)) * 2;
@@ -71,6 +68,8 @@ unsigned char display_get_current_symbol(short offset){
     return video_mem[0];
 }
 
+
+// Удалить текущий символ (можно со смещением)
 void display_delete_current_symbol(short offset){
     unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
 	video_mem += (80 * (display_cursor_pos_y) + (display_cursor_pos_x)) * 2;

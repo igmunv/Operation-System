@@ -2,9 +2,15 @@
 #define PIT_CH0  0x40
 #define PIT_INPUT_FREQ 1193182UL
 
-volatile unsigned long ticks = 0;
+// Количество тиков с момента запуска
+volatile unsigned long ticks __attribute__((section(".os_data"))) = 0;
 
+
+// Инициализация таймера PIT
 void PIT_init(unsigned int freq_hz) {
+
+    // Выставляем заданную в freq_hz частоту (количество тиков в секунду)
+
     unsigned int divisor = (unsigned int)(PIT_INPUT_FREQ / freq_hz); // 1193182 / freq
     unsigned char lo = divisor & 0xFF;
     unsigned char hi = (divisor >> 8) & 0xFF;
@@ -17,6 +23,7 @@ void PIT_init(unsigned int freq_hz) {
     outb(PIT_CH0, hi);
 }
 
+// Обработчик прерывания PIT
 void tick_handler(){
 	ticks++;
 	outb(0x20, 0x20);

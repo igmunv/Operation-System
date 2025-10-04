@@ -1,11 +1,13 @@
 global in_ah, in_al, in_bh, in_bl, in_ch, in_cl, in_dh, in_dl
 global in_ax, in_bx, in_cx, in_dx
+global in_ebx, in_esi
+
 global get_ah, get_al, get_bh, get_bl, get_ch, get_cl, get_dh, get_dl
 global get_ax, get_bx, get_cx, get_dx
+global get_ebx, get_esi
+
 global clear_ah, clear_al, clear_bh, clear_bl, clear_ch, clear_cl, clear_dh, clear_dl
 global clear_ax, clear_bx, clear_cx, clear_dx
-
-global get_ebx, in_ebx, get_esi, in_esi
 
 section .text
 

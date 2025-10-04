@@ -2,3 +2,4 @@ output/
 *.elf
 **.kate-swp
 **.drawio.bkp
+**.drawio.dtmp

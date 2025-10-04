@@ -1,3 +1,4 @@
+// Полезные ASM функции
 void outb (unsigned short port, unsigned char byte){
 	asm volatile ("outb %b0, %w1" : : "a" (byte), "Nd" (port));
 }
