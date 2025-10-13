@@ -1,6 +1,8 @@
 
 // Обработчики прерываний на ASM
 extern void api_asm_display_handler();
+extern void api_asm_ata_handler();
+extern void api_asm_execute_handler();
 
 
 // Обработчик API прерывания дисплея
@@ -8,8 +10,8 @@ void api_display_handler(){
 
     unsigned char command_type = 0;
     unsigned char symbol = 0;
-    unsigned char x = 0;
-    unsigned char y = 0;
+    unsigned short x = 0;
+    unsigned short y = 0;
     unsigned char font_color = 0;
     unsigned char background_color = 0;
     short offset = 0;
@@ -19,10 +21,10 @@ void api_display_handler(){
     // Print symbol
     if (command_type == 0){
         symbol = get_bl();
-        x = get_bh();
-        y = get_cl();
-        font_color = get_ch();
-        background_color = get_dl();
+        x = get_dx();
+        y = get_si();
+        font_color = get_bh();
+        background_color = get_cl();
         display_print_symbol(symbol, x, y, font_color, background_color);
     }
 
@@ -57,10 +59,33 @@ void api_display_handler(){
     outb(0x20, 0x20);
 }
 
+// Обработчик API прерывания ATA диска
+void api_ata_handler(){
+    unsigned char command_type = 0;
+    command_type = get_ah();
+
+    if (command_type == 0){
+        unsigned int lba = get_ebx();
+        unsigned char* result = get_edx();
+        ata_read_sector_(lba, result);
+    }
+
+    outb(0x20, 0x20);
+}
+
+// Обработчик API прерывания запуска программы
+void api_execute_handler(){
+    outb(0x20, 0x20);
+    int program_index = get_ebx();
+    int return_code = progloader_run_program(program_index);
+    in_ebx(return_code);
+}
 
 // Регистрация API прерываний
 void api_registration_functions(){
     IDT_reg_handler(34, 0x08, 0x80 | 0x0E, api_asm_display_handler);
+    IDT_reg_handler(35, 0x08, 0x80 | 0x0E, api_asm_ata_handler);
+    IDT_reg_handler(36, 0x08, 0x80 | 0x0E, api_asm_execute_handler);
 }
 
 

@@ -5,7 +5,7 @@ volatile unsigned short display_cursor_pos_x __attribute__((section(".os_data"))
 volatile unsigned short display_cursor_pos_y __attribute__((section(".os_data"))) = 0;
 
 // Нижний лимит по y
-const char display_limit_y_bottom = 23;
+const char display_limit_y_bottom = 24;
 
 
 // Обновить курсор
@@ -32,7 +32,7 @@ void display_new_line(){
 
 
 // Вывести символ на экран
-void display_print_symbol(unsigned char symbol, char x, char y, char font_color, char bkgr_color){
+void display_print_symbol(unsigned char symbol, unsigned short x, unsigned short y, char font_color, char bkgr_color){
 	unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
 	video_mem += (80 * y + x) * 2;
     video_mem[0] = symbol;

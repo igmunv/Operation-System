@@ -85,13 +85,13 @@ void io_printx(unsigned char* string, char x, char y, char font_color, char bkgr
 
 // Упрощённый вывод символа в терминал
 void print_symbol(unsigned char symbol){
-    io_printx_symbol(symbol, *io_display_cursor_pos_x, *io_display_cursor_pos_y, 7, 0);
+    io_printx_symbol(symbol, *io_display_cursor_pos_x, *io_display_cursor_pos_y, 0, 7);
 }
 
 
 // Упрощённый вывод строки в терминал
 void print(unsigned char* text){
-    io_printx(text, *io_display_cursor_pos_x, *io_display_cursor_pos_y, 7, 0);
+    io_printx(text, *io_display_cursor_pos_x, *io_display_cursor_pos_y, io_default_font_color, io_default_bckd_color);
     io_new_line();
 }
 

@@ -2,8 +2,9 @@
 // Обработчики прерываний на ASM
 extern void asm_tick_handler();
 extern void asm_keyboard_handler();
+extern void asm_floppy_handler();
 
-// Инициализация драйверов
+// Инициализация драйверов до включения прерываний
 void drivers_init(){
 
     // Регистрация обработчиков для прерываний
@@ -13,4 +14,9 @@ void drivers_init(){
     // Инициализация устройств
     PIT_init(1000);
 
+}
+
+// Инициализация драйверов после включения прерываний
+void drivers_init_late(){
+    progloader_init();
 }

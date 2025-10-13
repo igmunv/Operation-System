@@ -1,4 +1,18 @@
 #define TERMINAL_BUFFER_SIZE 1024
+#define KEYBOARD_BUFFER_SIZE 16
+
+#include "../lib/asm.c"
+#include "../lib/string.c"
+#include "../lib/io.c"
+#include "../lib/time.c"
+#include "../lib/programs.c"
+
+// Header: start
+volatile unsigned char _start_header[16] __attribute__((section(".start_header"))) = {'_','_','_','I','A','M','P','R','O','G','R','A','M','_','_','_'};
+// Header: info
+volatile unsigned char _info_header[20] __attribute__((section(".info_header"))) = "terminal";
+// Header: end
+volatile unsigned char _end_header[16] __attribute__((section(".end_header"))) = {'_','_','_','E','N','D','P','R','O','G','R','A','M','_','_','_'};
 
 // Special memory: keyboard
 unsigned char* pkeyboard_buffer = (unsigned char*)0x5000;
@@ -31,13 +45,9 @@ void terminal_buffer_clear(){
     terminal_ptr = 0;
 }
 
-void print_symbol(unsigned char symbol){
-    io_print_symbol(symbol, *pdisplay_cursor_pos_x, *pdisplay_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-}
 
-void print(unsigned char* text){
-    io_print(text, *pdisplay_cursor_pos_x, *pdisplay_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-}
+
+
 
 void terminal_command_handler(){
 
@@ -53,10 +63,14 @@ void terminal_command_handler(){
     if (is_str_equally(&cmd_clear, strlen(&cmd_clear), &terminal_buffer)){
         io_clear();
     }
+    else if (is_digit(&terminal_buffer)){
+        int prog_num;
+        stoi(&terminal_buffer, &prog_num);
+        program_run(prog_num);
+    }
     else{
-         if (is_str_equally(&cmd_help, strlen(&cmd_help), &terminal_buffer)){
-            //display_print(cmd_help_text, 0, display_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-
+        if (is_str_equally(&cmd_help, strlen(&cmd_help), &terminal_buffer)){
+            program_run(1);
         }
 
         else if (is_str_equally(&cmd_uptime, strlen(&cmd_uptime), &terminal_buffer)){
@@ -73,7 +87,6 @@ void terminal_command_handler(){
         }
 
         limit_y_top = *pdisplay_cursor_pos_y;
-        io_new_line();
     }
 }
 
@@ -81,7 +94,7 @@ void terminal_enter_key_handler(){
     limit_y_top = *pdisplay_cursor_pos_y;
     terminal_buffer[terminal_ptr] = '\0';
     terminal_ptr = (terminal_ptr+1) % TERMINAL_BUFFER_SIZE;
-    display_new_line();
+    io_new_line();
     if (terminal_ptr > 1) terminal_command_handler();
     terminal_buffer_clear();
 
@@ -106,7 +119,7 @@ void terminal_other_key_handler(unsigned char scancode){
     if (symbol != '\0'){
         terminal_buffer[terminal_ptr] = symbol;
         terminal_ptr = (terminal_ptr+1) % TERMINAL_BUFFER_SIZE;
-        io_print_symbol(symbol, *pdisplay_cursor_pos_x, *pdisplay_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
+        io_printx_symbol(symbol, *pdisplay_cursor_pos_x, *pdisplay_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
         (*pdisplay_cursor_pos_x)++;
         io_cursor_update();
     }
@@ -149,4 +162,9 @@ void terminal_init(){
     terminal_buffer_clear();
     io_cursor_update();
     terminal_keyboard_listen();
+}
+
+void _start(void) __attribute__((section(".text.start")));
+void _start(){
+    terminal_init();
 }

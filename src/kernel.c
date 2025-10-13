@@ -14,6 +14,8 @@ const unsigned int multiboot_header[] = {
 #include "drivers/keyboard.c"
 #include "drivers/display.c"
 #include "drivers/PIT.c"
+#include "drivers/ata.c"
+#include "drivers/progloader.c"
 // api
 #include "api/api.c"
 // libs
@@ -21,8 +23,8 @@ const unsigned int multiboot_header[] = {
 #include "lib/string.c"
 #include "lib/time.c"
 #include "lib/io.c"
-// programs
-#include "programs/terminal.c"
+#include "lib/ata.c"
+
 
 // ASM-functions
 extern void gdt_init();
@@ -37,7 +39,7 @@ void kmain(void){
 	// Ints disable
     interrupt_disable();
 
-	// Add interrupt, handlers. Init
+	// Add interrupt, handlers. Init before turning on ints
 	drivers_init();
 	api_init();
 
@@ -48,12 +50,15 @@ void kmain(void){
 	// Ints enable
 	interrupt_enable();
 
+	// Init after turning on ints
+	drivers_init_late();
 
-	// - - Test - -
-	terminal_init();
-
+	// Start default program
+	progloader_run_default();
 
 	// Endless loop
+	print("Kernel:");
+	print("Endless loop...");
 	while(1)
 	{
 		asm("hlt");
