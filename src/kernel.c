@@ -6,6 +6,10 @@ const unsigned int multiboot_header[] = {
 	-(0x1BADB002)
 };
 
+
+volatile unsigned int execute_program = 0;
+
+
 // kernel
 #include "lib/asm.c"
 #include "IDT_PIC.c"
@@ -21,13 +25,32 @@ const unsigned int multiboot_header[] = {
 // libs
 #include "lib/memory.c"
 #include "lib/string.c"
-#include "lib/time.c"
+// #include "lib/time.c"
 #include "lib/io.c"
 #include "lib/ata.c"
 
 
 // ASM-functions
 extern void gdt_init();
+
+
+// Loop
+__attribute__((section(".kernel_loop"))) void kernel_loop(void) {
+	while(1)
+	{
+
+		if (execute_program == 0){
+			progloader_run_default();
+		}
+
+		else{
+			progloader_run_program(execute_program);
+			execute_program = 0;
+		}
+
+		asm("hlt");
+	}
+}
 
 
 // Main
@@ -53,14 +76,6 @@ void kmain(void){
 	// Init after turning on ints
 	drivers_init_late();
 
-	// Start default program
-	progloader_run_default();
-
 	// Endless loop
-	print("Kernel:");
-	print("Endless loop...");
-	while(1)
-	{
-		asm("hlt");
-	}
+	kernel_loop();
 }

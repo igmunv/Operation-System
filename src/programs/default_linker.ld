@@ -3,7 +3,7 @@ ENTRY(_start)
 SECTIONS
 {
 
-    /* Заголовок начала программы */
+    /* Заголовок начала прsограммы */
     . = 0x30000;
     .start_header : {
         *(.start_header)

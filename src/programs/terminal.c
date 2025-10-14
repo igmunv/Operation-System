@@ -51,42 +51,73 @@ void terminal_buffer_clear(){
 
 void terminal_command_handler(){
 
+    // Commands
     unsigned char cmd_help[5] = "help";
+    unsigned char cmd_list[5] = "list";
     unsigned char cmd_clear[6] = "clear";
     unsigned char cmd_uptime[7] = "uptime";
     unsigned char cmd_poweroff[9] = "poweroff";
 
-    unsigned char cmd_adr[4] = "adr";
+    // Data for commands
+    char* cmd_help_text = "Available commands:\n| [NUMBER] - run program\n| list - view programs\n| clear - clear display\n| poweroff - shutdown system";
 
-    char* cmd_help_text = "Available commands:\n| help\n| clear\n| uptime\n| poweroff";
-
+    // Clear
     if (is_str_equally(&cmd_clear, strlen(&cmd_clear), &terminal_buffer)){
         io_clear();
     }
+
+    // Number - Run program
     else if (is_digit(&terminal_buffer)){
         int prog_num;
         stoi(&terminal_buffer, &prog_num);
         program_run(prog_num);
     }
+
+    // Other commands
     else{
+
+        // Help
         if (is_str_equally(&cmd_help, strlen(&cmd_help), &terminal_buffer)){
-            program_run(1);
+            print(cmd_help_text);
         }
 
-        else if (is_str_equally(&cmd_uptime, strlen(&cmd_uptime), &terminal_buffer)){
-            long uptime_second = (*pticks) / 1000;
-            unsigned char uptime_second_str[50];
-            itos(uptime_second, &uptime_second_str);
-            print(uptime_second_str);
+        // List
+        if (is_str_equally(&cmd_list, strlen(&cmd_list), &terminal_buffer)){
+            print("All programs in disk:");
+            for (int i = 1; i < *program_count; i++){
+
+                char num[3] = {0,0,0};
+                itos(i, &num);
+                print(num);
+                (*pdisplay_cursor_pos_y)--;
+                (*pdisplay_cursor_pos_x)++;
+                (*pdisplay_cursor_pos_x)++;
+                (*pdisplay_cursor_pos_x)++;
+                (*pdisplay_cursor_pos_x)++;
+                print(programs[i].name);
+            }
         }
+
+        // Poweroff
         else if (is_str_equally(&cmd_poweroff, strlen(&cmd_poweroff), &terminal_buffer)){
             outw(0x604, 0x2000);
         }
+
         else {
+
+            // Chech name programs and run
+            for (int i = 1; i < *program_count; i++){
+                if (is_str_equally(&programs[i].name, strlen(&programs[i].name), &terminal_buffer)){
+                    program_run(i);
+                }
+            }
+
+            // Unknow command
             print("Command not found!");
         }
 
         limit_y_top = *pdisplay_cursor_pos_y;
+
     }
 }
 
@@ -97,7 +128,6 @@ void terminal_enter_key_handler(){
     io_new_line();
     if (terminal_ptr > 1) terminal_command_handler();
     terminal_buffer_clear();
-
 }
 
 void terminal_backspace_key_handler(){
@@ -158,7 +188,7 @@ void terminal_keyboard_listen(){
 }
 
 void terminal_init(){
-    io_clear();
+    // io_clear();
     terminal_buffer_clear();
     io_cursor_update();
     terminal_keyboard_listen();

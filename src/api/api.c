@@ -77,12 +77,14 @@ void api_ata_handler(){
 void api_execute_handler(){
     outb(0x20, 0x20);
     int program_index = get_ebx();
-    int return_code = progloader_run_program(program_index);
-    in_ebx(return_code);
+    execute_program = program_index;
 }
 
 // Регистрация API прерываний
 void api_registration_functions(){
+
+    // Не забывай: IRQ всегда делает только маленькую и быструю работу
+
     IDT_reg_handler(34, 0x08, 0x80 | 0x0E, api_asm_display_handler);
     IDT_reg_handler(35, 0x08, 0x80 | 0x0E, api_asm_ata_handler);
     IDT_reg_handler(36, 0x08, 0x80 | 0x0E, api_asm_execute_handler);

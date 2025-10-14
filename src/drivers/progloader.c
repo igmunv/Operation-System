@@ -18,7 +18,7 @@ struct program_info{
 };
 
 unsigned char* default_program_load_address = (unsigned char*)DEFAULT_PROGRAM_ADDRESS;
-unsigned char* program_load_address = (unsigned char*)MAX_PROGRAM_COUNT;
+unsigned char* program_load_address = (unsigned char*)PROGRAM_ADDRESS;
 
 volatile struct program_info programs[MAX_PROGRAM_COUNT] __attribute__((section(".os_data")));
 volatile int program_count __attribute__((section(".os_data"))) = 0;
@@ -176,28 +176,26 @@ void progloader_load_program(int program_index, int address){
 
 }
 
-extern int asm_progloader_run(void* newesp, void* address);
-
 // Запуск программы
 int progloader_run(int program_index, int address, int default_){
     if (program_index < program_count && program_index >= 0){
+
+        // Print program name
+        // volatile unsigned short* io_display_cursor_pos_x = (unsigned short*)0x5014;
+        // volatile unsigned short* io_display_cursor_pos_y = (unsigned short*)0x5016;
+        //
+        // io_printx("Load: ", *io_display_cursor_pos_x, *io_display_cursor_pos_y, 7, 0);
+        // (*io_display_cursor_pos_x)+=6;
+        // io_printx(programs[program_index].name, *io_display_cursor_pos_x, *io_display_cursor_pos_y, 7, 0);
+        // (*io_display_cursor_pos_y)++;
+        // (*io_display_cursor_pos_x)=0;
+
+        // Load program from disk in memory
         progloader_load_program(program_index,address);
 
+        // Run program
         int (*entry)() = (int(*)())(address+30);
-
-        unsigned int new_esp;
-        // Дефолтная программа: ставим текущий esp
-        if (default_) {
-            void *sp;
-            asm volatile("mov %%esp, %0" : "=r"(sp));
-            new_esp = sp;
-        }
-        // Программа: ставим выделенный esp
-        else new_esp = PROGRAM_STACK_ADDRESS;
-
-        // Запуск
-        int ret = asm_progloader_run((void*)new_esp, (void*)entry);
-
+        int ret = entry();
         return ret;
 
     }
@@ -210,8 +208,6 @@ int progloader_run(int program_index, int address, int default_){
 int progloader_run_default(){
     // По умолчанию запускаем самую первую программу на диске
     char default_program_index = 0;
-    print("Load");
-    print(programs[default_program_index].name);
     int return_code = progloader_run(default_program_index, default_program_load_address, 1);
     if (return_code == -1){
         print("Default program is not found!");
