@@ -1,8 +1,8 @@
-#include "../libs/shared_memory.h"
-#include "../libs/asm.c"
-#include "../libs/string.c"
-#include "../libs/io.c"
-#include "../libs/time.c"
+#include "../../libs/shared_memory.h"
+#include "../../libs/asm.h"
+#include "../../libs/string.h"
+#include "../../libs/io.h"
+#include "../../libs/time.h"
 
 // Header: start
 volatile unsigned char _start_header[16] __attribute__((section(".start_header"))) = {'_','_','_','I','A','M','P','R','O','G','R','A','M','_','_','_'};

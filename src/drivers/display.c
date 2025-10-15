@@ -3,11 +3,9 @@
 #include "display.h"
 #include "../libs/shared_memory.h"
 
-// Координаты курсора
-volatile unsigned short display_cursor_pos_x __attribute__((section(".os_data"))) = 0;
-volatile unsigned short display_cursor_pos_y __attribute__((section(".os_data"))) = 0;
 
 // Нижний лимит по y
+const char display_limit_x_bottom = 79;
 const char display_limit_y_bottom = 24;
 
 
@@ -36,13 +34,23 @@ void display_new_line(){
 
 // Вывести символ на экран
 void display_print_symbol(unsigned char symbol, unsigned short x, unsigned short y, char font_color, char bkgr_color){
-	unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
-	video_mem += (80 * y + x) * 2;
+    unsigned char* video_mem = (unsigned char*)VIDEO_BUFFER_PTR;
+    video_mem += (80 * y + x) * 2;
     video_mem[0] = symbol;
     video_mem[1] = font_color;
     bkgr_color = bkgr_color << 4;
     video_mem[1] = video_mem[1] | bkgr_color;
     video_mem += 2;
+
+    if ((x + 1) > display_limit_x_bottom){
+        DISPLAY_CURSOR_POS_Y = y+1;
+        DISPLAY_CURSOR_POS_X = 0;
+    }
+    else{
+        DISPLAY_CURSOR_POS_X = x+1;
+        DISPLAY_CURSOR_POS_Y = y;
+    }
+
 }
 
 

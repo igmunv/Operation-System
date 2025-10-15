@@ -7,9 +7,6 @@ const unsigned int multiboot_header[] = {
 };
 
 
-volatile unsigned int execute_program __attribute__((section(".os_data"))) = 0;
-
-
 // libs
 #include "libs/string.h"
 #include "libs/time.h"
@@ -19,8 +16,9 @@ volatile unsigned int execute_program __attribute__((section(".os_data"))) = 0;
 #include "libs/asm.h"
 
 // Kernel
-#include "IDT_PIC.h"
 #include "gdt.h"
+#include "IDT_PIC.h"
+#include "memory.h"
 
 // drivers
 #include "drivers/drivers.h"
@@ -58,6 +56,9 @@ void kmain(void){
 
 	// GDT table init
 	gdt_init();
+
+	// Shared memory init
+	shared_memory_init();
 
 	// Ints disable
     interrupt_disable();

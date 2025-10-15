@@ -71,7 +71,7 @@ void terminal_command_handler(){
         }
 
         // List
-        if (is_str_equally(&cmd_list, strlen(&cmd_list), &terminal_buffer)){
+        else if (is_str_equally(&cmd_list, strlen(&cmd_list), &terminal_buffer)){
             print("All programs in disk:");
             for (int i = 1; i < PROGLOADER_PROGRAM_COUNT; i++){
 
@@ -139,16 +139,13 @@ void terminal_other_key_handler(unsigned char scancode){
         terminal_buffer[terminal_ptr] = symbol;
         terminal_ptr = (terminal_ptr+1) % TERMINAL_BUFFER_SIZE;
         io_printx_symbol(symbol, DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, terminal_default_font_color, terminal_default_bckd_color);
-        DISPLAY_CURSOR_POS_X++;
         io_cursor_update();
     }
 }
 
 void cursor(){
     io_printx_symbol('>', DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, terminal_default_font_color, terminal_default_bckd_color);
-    DISPLAY_CURSOR_POS_X++;
     io_printx_symbol(' ', DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, terminal_default_font_color, terminal_default_bckd_color);
-    DISPLAY_CURSOR_POS_X++;
     io_cursor_update();
 }
 

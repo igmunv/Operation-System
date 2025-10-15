@@ -66,19 +66,20 @@ void io_printx_symbol(unsigned char symbol, unsigned short x, unsigned short y, 
 
 
 // Вывести строку на экран
-void io_printx(unsigned char* string, char x, char y, char font_color, char bkgr_color){
+void io_printx(unsigned char* string, unsigned short x, unsigned short y, char font_color, char bkgr_color){
     for (unsigned char* i = string; *i != '\0'; i++){
         if (*i == '\n'){
+            DISPLAY_CURSOR_POS_Y++;
             y++;
+            DISPLAY_CURSOR_POS_X = 0;
             x = 0;
-            DISPLAY_CURSOR_POS_X = x;
-            DISPLAY_CURSOR_POS_Y = y;
         }
         else{
             io_printx_symbol(*i, x, y, font_color, bkgr_color);
             x++;
         }
     }
+    io_cursor_update();
 }
 
 

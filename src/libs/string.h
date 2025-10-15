@@ -22,7 +22,7 @@ char is_digit(char* string);
 int strlen(char* string);
 
 // Сравнение строк. Если одинаковые то 1, если разные то 0
-char is_str_equally(unsigned char* str1, short str1_len, unsigned char* str2);
+char is_str_equally(unsigned char* str1, unsigned char* str2);
 
 // String to int. Строку в число
 int stoi(char* string, int* result);
@@ -36,5 +36,7 @@ void ptox(void* ptr, unsigned char* result);
 // Возвращает символ ASCII по таблице исходя из скан-кода клавиши
 char scancode_to_ascii(unsigned char scancode, unsigned char shift_state);
 
+// Является ли сканкод символом
+int is_symbol_scancode(unsigned char scancode);
 
 #endif

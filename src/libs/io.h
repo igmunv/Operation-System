@@ -20,7 +20,7 @@ void io_delete_current_symbol(short offset);
 void io_printx_symbol(unsigned char symbol, unsigned short x, unsigned short y, unsigned char font_color, unsigned char background_color);
 
 // Вывести строку на экран
-void io_printx(unsigned char* string, char x, char y, char font_color, char bkgr_color);
+void io_printx(unsigned char* string, unsigned short x, unsigned short y, char font_color, char bkgr_color);
 
 // Упрощённый вывод символа в терминал
 void print_symbol(unsigned char symbol);

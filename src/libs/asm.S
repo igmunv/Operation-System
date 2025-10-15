@@ -1,3 +1,5 @@
+global outb, outw, inb, inw
+
 global in_ah, in_al, in_bh, in_bl, in_ch, in_cl, in_dh, in_dl
 global in_ax, in_bx, in_cx, in_dx, in_si
 global in_ebx, in_edx, in_esi
@@ -10,6 +12,46 @@ global clear_ah, clear_al, clear_bh, clear_bl, clear_ch, clear_cl, clear_dh, cle
 global clear_ax, clear_bx, clear_cx, clear_dx
 
 section .text
+
+
+outb:
+    push    ebp
+    mov     ebp, esp
+    ; [ebp+8] = port (16-bit)
+    ; [ebp+12] = byte (8-bit)
+    mov     dx, WORD [ebp+8]
+    mov     al,  BYTE [ebp+12]
+    out     dx, al
+    pop     ebp
+    ret
+
+outw:
+    push    ebp
+    mov     ebp, esp
+    mov     dx, WORD [ebp+8]
+    mov     ax, WORD [ebp+12]
+    out     dx, ax
+    pop     ebp
+    ret
+
+inb:
+    push    ebp
+    mov     ebp, esp
+    mov     dx, WORD [ebp+8]
+    xor     eax, eax
+    in      al, dx
+    pop     ebp
+    ret
+
+inw:
+    push    ebp
+    mov     ebp, esp
+    mov     dx, WORD [ebp+8]
+    xor     eax, eax
+    in      ax, dx
+    pop     ebp
+    ret
+
 
 ; Write 8-bit registers
 

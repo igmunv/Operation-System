@@ -5,9 +5,6 @@
 #include "PIT.h"
 #include "../libs/shared_memory.h"
 
-// Количество тиков с момента запуска
-volatile unsigned long ticks __attribute__((section(".os_data"))) = 0;
-
 
 // Инициализация таймера PIT
 void PIT_init(unsigned int freq_hz) {

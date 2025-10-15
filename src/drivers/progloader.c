@@ -52,14 +52,14 @@ void progloader_get_programs() {
                 data[i+15] == '_')
             {
                 // header
-                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].shi.sector = sector;
-                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].shi.byte_index = i;
+                PROGLOADER_PROGRAMS[PROGLOADER_PROGRAM_COUNT].shi.sector = sector;
+                PROGLOADER_PROGRAMS[PROGLOADER_PROGRAM_COUNT].shi.byte_index = i;
 
                 // name
                 for (short symb_index = 0; symb_index < 20; symb_index++){
-                    ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].name[symb_index] = data[i+16+symb_index];
+                    PROGLOADER_PROGRAMS[PROGLOADER_PROGRAM_COUNT].name[symb_index] = data[i+16+symb_index];
                 }
-                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].name[19] = 0;
+                PROGLOADER_PROGRAMS[PROGLOADER_PROGRAM_COUNT].name[19] = 0;
 
 
                 flag_start_header = 1;
@@ -89,8 +89,8 @@ void progloader_get_programs() {
                 data[i+15] == '_')
             {
                 // header
-                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].ehi.sector = sector;
-                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].ehi.byte_index = i;
+                PROGLOADER_PROGRAMS[PROGLOADER_PROGRAM_COUNT].ehi.sector = sector;
+                PROGLOADER_PROGRAMS[PROGLOADER_PROGRAM_COUNT].ehi.byte_index = i;
 
                 flag_start_header = 0;
                 flag_end_header = 1;
@@ -103,7 +103,7 @@ void progloader_get_programs() {
 void progloader_load_program(int program_index, int address){
     unsigned char* l_prog_load_addr = (unsigned char*)address;
     if (program_index < PROGLOADER_PROGRAM_COUNT && program_index >= 0){
-        struct program_info program = ((struct program_info*)PROGLOADER_PROGRAMS)[program_index];
+        struct program_info program = PROGLOADER_PROGRAMS[program_index];
         int start_sector = program.shi.sector;
         int end_sector = program.ehi.sector;
         int start_byte_index = program.shi.byte_index;

@@ -101,7 +101,8 @@ int strlen(char* string){
 
 
 // Сравнение строк. Если одинаковые то 1, если разные то 0
-char is_str_equally(unsigned char* str1, short str1_len, unsigned char* str2){
+char is_str_equally(unsigned char* str1, unsigned char* str2){
+    short str1_len = strlen(str1);
     for (short n = 0; n <= str1_len; n++){
         unsigned char str1_sym = str1[n];
         unsigned char str2_sym = str2[n];
@@ -339,4 +340,12 @@ char scancode_to_ascii(unsigned char scancode, unsigned char shift_state){
             default: return '\0'; // If different, then 0
         }
     }
+}
+
+
+// Является ли сканкод символом
+int is_symbol_scancode(unsigned char scancode){
+    if ((scancode >= 2 && scancode <= 13) || (scancode >= 16 && scancode <= 27) ||
+        (scancode >= 30 && scancode <= 57)) return 1;
+    else return 0;
 }

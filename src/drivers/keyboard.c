@@ -7,15 +7,6 @@
 #include "keyboard.h"
 #include "../libs/shared_memory.h"
 
-// Буфер клавиатуры и указатель-счётчик буфера
-volatile unsigned char keyboard_buffer[KEYBOARD_BUFFER_SIZE] __attribute__((section(".os_data")));
-volatile unsigned char keyboard_buffer_ptr __attribute__((section(".os_data"))) = 0;
-
-// Флаги специальных клавиш
-volatile char keyboard_shift_pressed __attribute__((section(".os_data"))) = 0;
-volatile char keyboard_ctrl_pressed __attribute__((section(".os_data"))) = 0;
-volatile char keyboard_alt_pressed __attribute__((section(".os_data"))) = 0;
-
 // Добавление сканн-кода в буфер клавиатуры (для последующего использования программами)
 void keyboard_scancode_add_in_buffer(unsigned char scancode){
     KEYBOARD_BUFFER[KEYBOARD_BUFFER_PTR] = scancode;

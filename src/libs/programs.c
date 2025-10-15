@@ -18,5 +18,5 @@ void exit(){
 int program_run(int program_index){
     in_ebx(program_index);
     syscall_program();
-    exit();
+    // exit();
 }
