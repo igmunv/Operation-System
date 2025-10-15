@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
   <diagram name="Page-1" id="FCg047ZmniYvs8AbTUPz">
-    <mxGraphModel dx="1831" dy="602" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3122" dy="873" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -124,7 +124,7 @@
         <mxCell id="P1c2-JbZTMkBssamJEXa-28" value="0x5000" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-625" y="1400" width="120" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="P1c2-JbZTMkBssamJEXa-29" value="special memory" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#CCFFCC;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="P1c2-JbZTMkBssamJEXa-29" value="shared memory" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#CCFFCC;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="-625" y="1340" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="P1c2-JbZTMkBssamJEXa-30" value="kernel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B3B3B3;fontStyle=1" parent="1" vertex="1">
@@ -300,13 +300,8 @@
         <mxCell id="QtdNPSn90gwQSZT8zCZ1-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=2;" parent="1" source="QtdNPSn90gwQSZT8zCZ1-35" target="QtdNPSn90gwQSZT8zCZ1-40" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="QtdNPSn90gwQSZT8zCZ1-74" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeWidth=2;" parent="1" source="QtdNPSn90gwQSZT8zCZ1-52" target="QtdNPSn90gwQSZT8zCZ1-71" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="-150" y="335" />
-              <mxPoint x="-150" y="250" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="K8M5WIdU0tz9geBWdDfM-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;" edge="1" parent="1" source="QtdNPSn90gwQSZT8zCZ1-52" target="QtdNPSn90gwQSZT8zCZ1-23">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="QtdNPSn90gwQSZT8zCZ1-52" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFCC;" parent="1" vertex="1">
           <mxGeometry x="-430" y="280" width="220" height="110" as="geometry" />
@@ -406,16 +401,10 @@
         <mxCell id="QtdNPSn90gwQSZT8zCZ1-87" value="Exit" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="167.5" y="80" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="QtdNPSn90gwQSZT8zCZ1-88" value="https://chatgpt.com/c/68edbdd0-1f24-832a-bebd-570c7ff0dba4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
-          <mxGeometry x="357.5" y="1250" width="275" height="210" as="geometry" />
-        </mxCell>
-        <mxCell id="QtdNPSn90gwQSZT8zCZ1-89" value="Сделать так чтобы execute_program лежал в shared memory и чтобы terminal мог его читать и выходил из keyboard_listen и выполнял программу из program_execute" style="text;html=1;align=left;verticalAlign=bottom;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="365" y="1250" width="260" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="0DMT_69ALq4xmR-gorlK-1" value="execute program" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="0DMT_69ALq4xmR-gorlK-1" value="execute program" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="122.5" y="860" width="120" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="0DMT_69ALq4xmR-gorlK-2" value="0x5000" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="0DMT_69ALq4xmR-gorlK-2" value="0x5000" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="45" y="860" width="60" height="20" as="geometry" />
         </mxCell>
         <mxCell id="P1c2-JbZTMkBssamJEXa-11" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -435,6 +424,9 @@
         </mxCell>
         <mxCell id="P1c2-JbZTMkBssamJEXa-17" value="0x7420" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="52.5" y="1095" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="K8M5WIdU0tz9geBWdDfM-3" value="Почему 2 kernel???" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="-1050" y="50" width="349" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
