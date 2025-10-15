@@ -1,11 +1,12 @@
 #define TERMINAL_BUFFER_SIZE 1024
 #define KEYBOARD_BUFFER_SIZE 16
 
-#include "../lib/asm.c"
-#include "../lib/string.c"
-#include "../lib/io.c"
-#include "../lib/time.c"
-#include "../lib/programs.c"
+#include "../libs/shared_memory.h"
+#include "../libs/asm.c"
+#include "../libs/string.c"
+#include "../libs/io.c"
+#include "../libs/time.c"
+#include "../libs/programs.c"
 
 // Header: start
 volatile unsigned char _start_header[16] __attribute__((section(".start_header"))) = {'_','_','_','I','A','M','P','R','O','G','R','A','M','_','_','_'};
@@ -13,18 +14,6 @@ volatile unsigned char _start_header[16] __attribute__((section(".start_header")
 volatile unsigned char _info_header[20] __attribute__((section(".info_header"))) = "terminal";
 // Header: end
 volatile unsigned char _end_header[16] __attribute__((section(".end_header"))) = {'_','_','_','E','N','D','P','R','O','G','R','A','M','_','_','_'};
-
-// Special memory: keyboard
-unsigned char* pkeyboard_buffer = (unsigned char*)0x5000;
-unsigned char* pkeyboard_buffer_ptr = (unsigned char*)0x5010;
-volatile char* pkeyboard_shift_pressed = (char*)0x5011;
-
-// Special memory: display
-volatile unsigned short* pdisplay_cursor_pos_x = (unsigned short*)0x5014;
-volatile unsigned short* pdisplay_cursor_pos_y = (unsigned short*)0x5016;
-
-// Special memory: ticks
-volatile unsigned long* pticks = (unsigned long*)0x5018;
 
 // Local memory
 volatile unsigned char keyboard_buffer_tail;
@@ -84,17 +73,17 @@ void terminal_command_handler(){
         // List
         if (is_str_equally(&cmd_list, strlen(&cmd_list), &terminal_buffer)){
             print("All programs in disk:");
-            for (int i = 1; i < *program_count; i++){
+            for (int i = 1; i < PROGLOADER_PROGRAM_COUNT; i++){
 
                 char num[3] = {0,0,0};
                 itos(i, &num);
                 print(num);
-                (*pdisplay_cursor_pos_y)--;
-                (*pdisplay_cursor_pos_x)++;
-                (*pdisplay_cursor_pos_x)++;
-                (*pdisplay_cursor_pos_x)++;
-                (*pdisplay_cursor_pos_x)++;
-                print(programs[i].name);
+                DISPLAY_CURSOR_POS_Y--;
+                DISPLAY_CURSOR_POS_X++;
+                DISPLAY_CURSOR_POS_X++;
+                DISPLAY_CURSOR_POS_X++;
+                DISPLAY_CURSOR_POS_X++;
+                print(((struct program_info*)PROGLOADER_PROGRAMS)[i].name);
             }
         }
 
@@ -106,8 +95,8 @@ void terminal_command_handler(){
         else {
 
             // Chech name programs and run
-            for (int i = 1; i < *program_count; i++){
-                if (is_str_equally(&programs[i].name, strlen(&programs[i].name), &terminal_buffer)){
+            for (int i = 1; i < PROGLOADER_PROGRAM_COUNT; i++){
+                if (is_str_equally(((struct program_info*)PROGLOADER_PROGRAMS)[i].name, strlen(((struct program_info*)PROGLOADER_PROGRAMS)[i].name), &terminal_buffer)){
                     program_run(i);
                 }
             }
@@ -116,13 +105,13 @@ void terminal_command_handler(){
             print("Command not found!");
         }
 
-        limit_y_top = *pdisplay_cursor_pos_y;
+        limit_y_top = DISPLAY_CURSOR_POS_Y;
 
     }
 }
 
 void terminal_enter_key_handler(){
-    limit_y_top = *pdisplay_cursor_pos_y;
+    limit_y_top = DISPLAY_CURSOR_POS_Y;
     terminal_buffer[terminal_ptr] = '\0';
     terminal_ptr = (terminal_ptr+1) % TERMINAL_BUFFER_SIZE;
     io_new_line();
@@ -132,27 +121,35 @@ void terminal_enter_key_handler(){
 
 void terminal_backspace_key_handler(){
     while (1){
-        if (*pdisplay_cursor_pos_x == 0 && *pdisplay_cursor_pos_y - 1 == limit_y_top) break;
+        if (DISPLAY_CURSOR_POS_X == 0 && DISPLAY_CURSOR_POS_Y - 1 == limit_y_top) break;
         else{
             io_delete_current_symbol(-1);
             terminal_ptr--;
             terminal_buffer[terminal_ptr] = '\0';
             unsigned char symbol = io_get_current_symbol(-1);
-            if ((*pdisplay_cursor_pos_y > 0 || (*pdisplay_cursor_pos_y == 0 && *pdisplay_cursor_pos_x > 0)) && symbol == '\0' && *pdisplay_cursor_pos_x != 0) continue;
+            if ((DISPLAY_CURSOR_POS_Y > 0 || (DISPLAY_CURSOR_POS_Y == 0 && DISPLAY_CURSOR_POS_X > 0)) && symbol == '\0' && DISPLAY_CURSOR_POS_X != 0) continue;
             else break;
         }
     }
 }
 
 void terminal_other_key_handler(unsigned char scancode){
-    unsigned char symbol = scancode_to_ascii(scancode, *pkeyboard_shift_pressed);
+    unsigned char symbol = scancode_to_ascii(scancode, KEYBOARD_SHIFT_PRESSED);
     if (symbol != '\0'){
         terminal_buffer[terminal_ptr] = symbol;
         terminal_ptr = (terminal_ptr+1) % TERMINAL_BUFFER_SIZE;
-        io_printx_symbol(symbol, *pdisplay_cursor_pos_x, *pdisplay_cursor_pos_y, terminal_default_font_color, terminal_default_bckd_color);
-        (*pdisplay_cursor_pos_x)++;
+        io_printx_symbol(symbol, DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, terminal_default_font_color, terminal_default_bckd_color);
+        DISPLAY_CURSOR_POS_X++;
         io_cursor_update();
     }
+}
+
+void cursor(){
+    io_printx_symbol('>', DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, terminal_default_font_color, terminal_default_bckd_color);
+    DISPLAY_CURSOR_POS_X++;
+    io_printx_symbol(' ', DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, terminal_default_font_color, terminal_default_bckd_color);
+    DISPLAY_CURSOR_POS_X++;
+    io_cursor_update();
 }
 
 void terminal_scancode_handler(unsigned char scancode){
@@ -160,6 +157,7 @@ void terminal_scancode_handler(unsigned char scancode){
     // Enter
     if (scancode == 28){
         terminal_enter_key_handler();
+        cursor();
     }
 
     // BackSpace
@@ -175,11 +173,11 @@ void terminal_scancode_handler(unsigned char scancode){
 }
 
 void terminal_keyboard_listen(){
-    keyboard_buffer_tail = *pkeyboard_buffer_ptr;
+    keyboard_buffer_tail = KEYBOARD_BUFFER_PTR;
     while (1){
-        if (keyboard_buffer_tail != *pkeyboard_buffer_ptr){
+        if (keyboard_buffer_tail != KEYBOARD_BUFFER_PTR){
             unsigned char scancode;
-            scancode = pkeyboard_buffer[keyboard_buffer_tail];
+            scancode = KEYBOARD_BUFFER[keyboard_buffer_tail];
             terminal_scancode_handler(scancode);
             keyboard_buffer_tail = (keyboard_buffer_tail+1) % KEYBOARD_BUFFER_SIZE;
         }
@@ -190,6 +188,7 @@ void terminal_keyboard_listen(){
 void terminal_init(){
     // io_clear();
     terminal_buffer_clear();
+    cursor();
     io_cursor_update();
     terminal_keyboard_listen();
 }

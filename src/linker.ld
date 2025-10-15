@@ -41,15 +41,6 @@ SECTIONS
     *(COMMON)
   }
 
-  /* Один стек для программ */
-.program_stack 0x60000 : {
-    *(.program_stack)
-    . = ALIGN(4);
-    _program_stack_bottom = .;
-    . = . + 0x20000;
-    _program_stack_top = .;
-}
-
 
   /*
 

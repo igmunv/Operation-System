@@ -4,6 +4,9 @@
 #define KEYBOARD_CTRL_SCANCODE 29
 #define KEYBOARD_ALT_SCANCODE 56
 
+#include "keyboard.h"
+#include "../libs/shared_memory.h"
+
 // Буфер клавиатуры и указатель-счётчик буфера
 volatile unsigned char keyboard_buffer[KEYBOARD_BUFFER_SIZE] __attribute__((section(".os_data")));
 volatile unsigned char keyboard_buffer_ptr __attribute__((section(".os_data"))) = 0;
@@ -15,8 +18,8 @@ volatile char keyboard_alt_pressed __attribute__((section(".os_data"))) = 0;
 
 // Добавление сканн-кода в буфер клавиатуры (для последующего использования программами)
 void keyboard_scancode_add_in_buffer(unsigned char scancode){
-    keyboard_buffer[keyboard_buffer_ptr] = scancode;
-    keyboard_buffer_ptr = (keyboard_buffer_ptr+1) % KEYBOARD_BUFFER_SIZE;
+    KEYBOARD_BUFFER[KEYBOARD_BUFFER_PTR] = scancode;
+    KEYBOARD_BUFFER_PTR = (KEYBOARD_BUFFER_PTR+1) % KEYBOARD_BUFFER_SIZE;
 }
 
 
@@ -42,13 +45,13 @@ char keyboard_is_special_key(unsigned char scancode){
 // Обработчик специальных клавиш (выставляет флаги)
 char keyboard_special_key_handler(unsigned char scancode, char state){
     if ((scancode) == KEYBOARD_SHIFT_SCANCODE){
-        keyboard_shift_pressed = state;
+        KEYBOARD_SHIFT_PRESSED = state;
     }
     else if ((scancode) == KEYBOARD_CTRL_SCANCODE){
-        keyboard_ctrl_pressed = state;
+        KEYBOARD_CTRL_PRESSED = state;
     }
     else if ((scancode) == KEYBOARD_ALT_SCANCODE){
-        keyboard_alt_pressed = state;
+        KEYBOARD_ALT_PRESSED = state;
     }
 }
 

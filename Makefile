@@ -6,19 +6,41 @@ all:
 	$(MAKE) run
 
 build:
-	mkdir -p ./output
+	mkdir -p ./output/
+	mkdir -p ./output/asm/
+	mkdir -p ./output/api/
+	mkdir -p ./output/drivers/
+	mkdir -p ./output/libs/
+	mkdir -p ./output/programs/
 
 	# Assembler
-	nasm -f elf32 src/lib/asm.S -o output/asm.o
-	nasm -f elf32 src/IDT_handlers.S -o output/IDT_handlers.o
-	nasm -f elf32 src/gdt.S -o output/gdt.o
-	nasm -f elf32 src/api/api.S -o output/api.o
+	nasm -f elf32 src/libs/asm.S -o output/asm/asm.o
+	nasm -f elf32 src/IDT_handlers.S -o output/asm/IDT_handlers.o
+	nasm -f elf32 src/gdt.S -o output/asm/gdt.o
+	nasm -f elf32 src/api/api.S -o output/asm/api.o
 
 	# C
-	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -Wall -c src/kernel.c -o output/kernel.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/kernel.c -o output/kernel.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/IDT_PIC.c -o output/IDT_PIC.o
+
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/api/api.c -o output/api/api.o
+
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/ata.c -o output/drivers/ata.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/display.c -o output/drivers/display.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/drivers.c -o output/drivers/drivers.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/keyboard.c -o output/drivers/keyboard.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/PIT.c -o output/drivers/PIT.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/progloader.c -o output/drivers/progloader.o
+
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/asm.c -o output/libs/asm.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/ata.c -o output/libs/ata.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/io.c -o output/libs/io.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/programs.c -o output/libs/programs.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/string.c -o output/libs/string.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/time.c -o output/libs/time.o
 
 	# Linker
-	i386-elf-ld -m elf_i386 -T src/linker.ld --oformat elf32-i386 -o output/kernel.elf output/kernel.o output/IDT_handlers.o output/gdt.o output/api.o output/asm.o
+	i386-elf-ld -m elf_i386 -T src/linker.ld --oformat elf32-i386 -o output/kernel.elf output/asm/asm.o output/asm/IDT_handlers.o output/asm/gdt.o output/asm/api.o output/kernel.o output/IDT_PIC.o output/api/api.o output/drivers/ata.o output/drivers/display.o output/drivers/drivers.o output/drivers/keyboard.o output/drivers/PIT.o output/drivers/progloader.o output/libs/asm.o output/libs/ata.o output/libs/io.o output/libs/programs.o output/libs/string.o output/libs/time.o
 
 build_programs:
 	mkdir -p ./output/programs/
@@ -28,7 +50,7 @@ build_programs:
 	# |
 
 	# NASM
-	nasm -f elf32 src/lib/asm.S -o output/programs/asm.o
+	nasm -f elf32 src/libs/asm.S -o output/programs/asm.o
 	# C
 	i386-elf-gcc -w -m32 -ffreestanding -fno-pie -fno-pic -nostdlib -c src/programs/terminal.c -o output/programs/terminal.o
 	# Linker

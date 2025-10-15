@@ -1,3 +1,5 @@
+#include "ata.h"
+
 // Системный вызов ATA
 unsigned char syscall_ata(unsigned char command_type){
     clear_ah();

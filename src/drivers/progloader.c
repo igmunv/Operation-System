@@ -1,28 +1,12 @@
 #define MAX_PROGRAM_COUNT 256
 #define PROGRAM_ADDRESS 0x40000
 #define DEFAULT_PROGRAM_ADDRESS 0x30000
-#define PROGRAM_STACK_ADDRESS (0x80000)
 
-volatile unsigned char def_prog_stack __attribute__((section(".default_program_stack"))) = 1;
-volatile unsigned char prog_stack __attribute__((section(".program_stack"))) = 2;
-
-struct header_info{
-    int sector; // номер сектора
-    int byte_index; // индекс байта начала заголовка
-};
-
-struct program_info{
-    unsigned char name[20];
-    struct header_info shi; // start header info
-    struct header_info ehi; // end header info
-};
+#include "progloader.h"
+#include "../libs/shared_memory.h"
 
 unsigned char* default_program_load_address = (unsigned char*)DEFAULT_PROGRAM_ADDRESS;
 unsigned char* program_load_address = (unsigned char*)PROGRAM_ADDRESS;
-
-volatile struct program_info programs[MAX_PROGRAM_COUNT] __attribute__((section(".os_data")));
-volatile int program_count __attribute__((section(".os_data"))) = 0;
-
 
 void progloader_get_programs() {
 
@@ -68,14 +52,14 @@ void progloader_get_programs() {
                 data[i+15] == '_')
             {
                 // header
-                programs[program_count].shi.sector = sector;
-                programs[program_count].shi.byte_index = i;
+                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].shi.sector = sector;
+                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].shi.byte_index = i;
 
                 // name
                 for (short symb_index = 0; symb_index < 20; symb_index++){
-                    programs[program_count].name[symb_index] = data[i+16+symb_index];
+                    ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].name[symb_index] = data[i+16+symb_index];
                 }
-                programs[program_count].name[19] = 0;
+                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].name[19] = 0;
 
 
                 flag_start_header = 1;
@@ -105,12 +89,12 @@ void progloader_get_programs() {
                 data[i+15] == '_')
             {
                 // header
-                programs[program_count].ehi.sector = sector;
-                programs[program_count].ehi.byte_index = i;
+                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].ehi.sector = sector;
+                ((struct program_info*)PROGLOADER_PROGRAMS)[PROGLOADER_PROGRAM_COUNT].ehi.byte_index = i;
 
                 flag_start_header = 0;
                 flag_end_header = 1;
-                program_count++;
+                PROGLOADER_PROGRAM_COUNT++;
             }
         }
     }
@@ -118,8 +102,8 @@ void progloader_get_programs() {
 
 void progloader_load_program(int program_index, int address){
     unsigned char* l_prog_load_addr = (unsigned char*)address;
-    if (program_index < program_count && program_index >= 0){
-        struct program_info program = programs[program_index];
+    if (program_index < PROGLOADER_PROGRAM_COUNT && program_index >= 0){
+        struct program_info program = ((struct program_info*)PROGLOADER_PROGRAMS)[program_index];
         int start_sector = program.shi.sector;
         int end_sector = program.ehi.sector;
         int start_byte_index = program.shi.byte_index;
@@ -178,7 +162,7 @@ void progloader_load_program(int program_index, int address){
 
 // Запуск программы
 int progloader_run(int program_index, int address, int default_){
-    if (program_index < program_count && program_index >= 0){
+    if (program_index < PROGLOADER_PROGRAM_COUNT && program_index >= 0){
 
         // Print program name
         // volatile unsigned short* io_display_cursor_pos_x = (unsigned short*)0x5014;

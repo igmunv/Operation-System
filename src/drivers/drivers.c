@@ -1,4 +1,7 @@
 
+#include "drivers.h"
+#include "../IDT_PIC.h"
+
 // Обработчики прерываний на ASM
 extern void asm_tick_handler();
 extern void asm_keyboard_handler();

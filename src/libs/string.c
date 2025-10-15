@@ -1,4 +1,5 @@
-
+#include "string.h"
+#include "shared_memory.h"
 
 // Возвращает символ (цифру), соответствующий цифре
 unsigned char itos_table(char i){
@@ -175,13 +176,6 @@ char btox_table(char byte){
         default: return 0;
     }
 }
-
-
-// Разделенный байт на: Младшие 4 бита и Старшие 4 бита
-struct byte_split_struct{
-    char low;
-    char high;
-};
 
 
 // Byte to hex. Байт в HEX строку (16-чный вид, строка)

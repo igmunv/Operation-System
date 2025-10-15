@@ -7,31 +7,31 @@ const unsigned int multiboot_header[] = {
 };
 
 
-volatile unsigned int execute_program = 0;
+volatile unsigned int execute_program __attribute__((section(".os_data"))) = 0;
 
 
-// kernel
-#include "lib/asm.c"
-#include "IDT_PIC.c"
-// drivers
-#include "drivers/drivers.c"
-#include "drivers/keyboard.c"
-#include "drivers/display.c"
-#include "drivers/PIT.c"
-#include "drivers/ata.c"
-#include "drivers/progloader.c"
-// api
-#include "api/api.c"
 // libs
-#include "lib/memory.c"
-#include "lib/string.c"
-// #include "lib/time.c"
-#include "lib/io.c"
-#include "lib/ata.c"
+#include "libs/string.h"
+#include "libs/time.h"
+#include "libs/io.h"
+#include "libs/ata.h"
+#include "libs/shared_memory.h"
+#include "libs/asm.h"
 
+// Kernel
+#include "IDT_PIC.h"
+#include "gdt.h"
 
-// ASM-functions
-extern void gdt_init();
+// drivers
+#include "drivers/drivers.h"
+#include "drivers/keyboard.h"
+#include "drivers/display.h"
+#include "drivers/PIT.h"
+#include "drivers/ata.h"
+#include "drivers/progloader.h"
+
+// api
+#include "api/api.h"
 
 
 // Loop
@@ -39,13 +39,13 @@ __attribute__((section(".kernel_loop"))) void kernel_loop(void) {
 	while(1)
 	{
 
-		if (execute_program == 0){
+		if (EXECUTE_PROGRAM == 0){
 			progloader_run_default();
 		}
 
 		else{
-			progloader_run_program(execute_program);
-			execute_program = 0;
+			progloader_run_program(EXECUTE_PROGRAM);
+			EXECUTE_PROGRAM = 0;
 		}
 
 		asm("hlt");

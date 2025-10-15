@@ -1,7 +1,8 @@
-#include "../lib/asm.c"
-#include "../lib/string.c"
-#include "../lib/io.c"
-#include "../lib/time.c"
+#include "../libs/shared_memory.h"
+#include "../libs/asm.c"
+#include "../libs/string.c"
+#include "../libs/io.c"
+#include "../libs/time.c"
 
 // Header: start
 volatile unsigned char _start_header[16] __attribute__((section(".start_header"))) = {'_','_','_','I','A','M','P','R','O','G','R','A','M','_','_','_'};
@@ -14,7 +15,7 @@ volatile unsigned char _end_header[16] __attribute__((section(".end_header"))) =
 int _start(void) __attribute__((section(".text.start")));
 int _start(void){
 
-    long uptime_second = (*ticks) / 1000;
+    long uptime_second = (TICKS) / 1000;
     unsigned char uptime_second_str[50];
     itos(uptime_second, &uptime_second_str);
     print(uptime_second_str);

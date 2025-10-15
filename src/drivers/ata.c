@@ -1,5 +1,6 @@
-
 #define ATA_BASE 0x1F0
+
+#include "ata.h"
 
 // Занято ли устройство
 int ata_wait_busy() {
@@ -22,7 +23,7 @@ int ata_wait_data_ready() {
 }
 
 // Чтение определенного секотра
-int ata_read_sector_(unsigned int lba, unsigned char* buffer) {
+int _ata_read_sector(unsigned int lba, unsigned char* buffer) {
 
     // Ждем пока диск не занят
     if (ata_wait_busy() < 0) {

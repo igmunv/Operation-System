@@ -2,6 +2,9 @@
 #define PIT_CH0  0x40
 #define PIT_INPUT_FREQ 1193182UL
 
+#include "PIT.h"
+#include "../libs/shared_memory.h"
+
 // Количество тиков с момента запуска
 volatile unsigned long ticks __attribute__((section(".os_data"))) = 0;
 
@@ -25,6 +28,6 @@ void PIT_init(unsigned int freq_hz) {
 
 // Обработчик прерывания PIT
 void tick_handler(){
-	ticks++;
+	TICKS++;
 	outb(0x20, 0x20);
 }

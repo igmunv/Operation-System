@@ -1,3 +1,4 @@
+#include "IDT_PIC.h"
 
 // Главная структура: хранит обработчик для конкретного прерывания
 struct IDT_row
@@ -19,10 +20,6 @@ struct IDT_ptr
 // Инициализация структур
 struct IDT_row IDT_table[256];
 struct IDT_ptr IDT_desc;
-
-// Тип: указатель
-typedef void (*intr_handler)();
-
 
 // Регистрация прерывания
 void IDT_reg_handler(int number, unsigned short segm_sel, unsigned short flags, intr_handler handler)

@@ -1,9 +1,5 @@
-
-// Обработчики прерываний на ASM
-extern void api_asm_display_handler();
-extern void api_asm_ata_handler();
-extern void api_asm_execute_handler();
-
+#include "api.h"
+#include "../libs/shared_memory.h"
 
 // Обработчик API прерывания дисплея
 void api_display_handler(){
@@ -67,7 +63,7 @@ void api_ata_handler(){
     if (command_type == 0){
         unsigned int lba = get_ebx();
         unsigned char* result = get_edx();
-        ata_read_sector_(lba, result);
+        _ata_read_sector(lba, result);
     }
 
     outb(0x20, 0x20);
@@ -77,7 +73,7 @@ void api_ata_handler(){
 void api_execute_handler(){
     outb(0x20, 0x20);
     int program_index = get_ebx();
-    execute_program = program_index;
+    EXECUTE_PROGRAM = program_index;
 }
 
 // Регистрация API прерываний

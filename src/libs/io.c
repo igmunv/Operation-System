@@ -1,7 +1,6 @@
-
-// Special memory: display
-volatile unsigned short* io_display_cursor_pos_x = (unsigned short*)0x5014;
-volatile unsigned short* io_display_cursor_pos_y = (unsigned short*)0x5016;
+#include "io.h"
+#include "shared_memory.h"
+#include "string.h"
 
 volatile unsigned char io_default_font_color = 7;
 volatile unsigned char io_default_bckd_color = 0;
@@ -72,8 +71,8 @@ void io_printx(unsigned char* string, char x, char y, char font_color, char bkgr
         if (*i == '\n'){
             y++;
             x = 0;
-            *io_display_cursor_pos_x = x;
-            *io_display_cursor_pos_y = y;
+            DISPLAY_CURSOR_POS_X = x;
+            DISPLAY_CURSOR_POS_Y = y;
         }
         else{
             io_printx_symbol(*i, x, y, font_color, bkgr_color);
@@ -85,13 +84,13 @@ void io_printx(unsigned char* string, char x, char y, char font_color, char bkgr
 
 // Упрощённый вывод символа в терминал
 void print_symbol(unsigned char symbol){
-    io_printx_symbol(symbol, *io_display_cursor_pos_x, *io_display_cursor_pos_y, io_default_font_color, io_default_bckd_color);
+    io_printx_symbol(symbol, DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, io_default_font_color, io_default_bckd_color);
 }
 
 
 // Упрощённый вывод строки в терминал
 void print(unsigned char* text){
-    io_printx(text, *io_display_cursor_pos_x, *io_display_cursor_pos_y, io_default_font_color, io_default_bckd_color);
+    io_printx(text, DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, io_default_font_color, io_default_bckd_color);
     io_new_line();
 }
 
@@ -100,10 +99,10 @@ void print_hex(char byte){
     struct byte_split_struct result;
     btox(byte, &result);
     print_symbol(result.high);
-    (*io_display_cursor_pos_x)++;
+    DISPLAY_CURSOR_POS_X++;
     print_symbol(result.low);
-    (*io_display_cursor_pos_x)++;
-    (*io_display_cursor_pos_x)++;
+    DISPLAY_CURSOR_POS_X++;
+    DISPLAY_CURSOR_POS_X++;
 }
 
 // Получить ввод пользователя
