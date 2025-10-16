@@ -40,10 +40,6 @@ __attribute__((section(".kernel_loop"))) void kernel_loop(void) {
 			progloader_run_program(EXECUTE_PROGRAM);
 		}
 
-		else if (EXECUTE_PROGRAM < 0){
-			return;
-		}
-
 		else{
 			progloader_run_program(EXECUTE_PROGRAM);
 			EXECUTE_PROGRAM = 0;

@@ -86,7 +86,7 @@ void term_command_handler(){
 
     // Poweroff
     else if (is_str_equally(&cmd_poweroff, &term_buffer)){
-        EXECUTE_PROGRAM = -1;
+
     }
 
     // Other
@@ -94,7 +94,7 @@ void term_command_handler(){
 
         // Chech name programs and run
         for (int i = 1; i < PROGLOADER_PROGRAM_COUNT; i++){
-            if (is_str_equally(((struct program_info*)PROGLOADER_PROGRAMS)[i].name, &term_buffer)){
+            if (is_str_equally(PROGLOADER_PROGRAMS[i].name, &term_buffer)){
                 program_run(i);
                 return;
             }
@@ -175,7 +175,7 @@ void term_keyboard_listen(){
     while(1){
 
         // Если появилась программа на исполнение
-        if (EXECUTE_PROGRAM != 0){
+        if (EXECUTE_PROGRAM > 0){
             return;
         }
 

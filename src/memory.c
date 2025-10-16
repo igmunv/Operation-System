@@ -25,10 +25,10 @@ volatile unsigned short display_cursor_pos_y __attribute__((section(".os_data"))
 volatile unsigned long ticks __attribute__((section(".os_data")));
 
 // Программы
-volatile struct program_info progloader_programs[MAX_PROGRAM_COUNT] __attribute__((section(".os_data")));
+// volatile struct program_info progloader_programs[MAX_PROGRAM_COUNT] __attribute__((section(".os_data")));
 
 // Количество программ
-volatile int progloader_program_count __attribute__((section(".os_data")));
+// volatile int progloader_program_count __attribute__((section(".os_data")));
 
 void shared_memory_init(){
     execute_program = 0;
@@ -47,19 +47,19 @@ void shared_memory_init(){
 
     ticks = 0;
 
-    struct program_info program_info_null;
-    for (int i = 0; i < 20; i++)
-        program_info_null.name[i] = 0;
-    struct header_info header_info_null;
-    header_info_null.sector = 0;
-    header_info_null.byte_index = 0;
-    program_info_null.shi = header_info_null;
-    program_info_null.ehi = header_info_null;
-
-    for (int i = 0; i < MAX_PROGRAM_COUNT; i++){
-        progloader_programs[i] = program_info_null;
-    }
-
-    progloader_program_count = 0;
+    // struct program_info program_info_null;
+    // for (int i = 0; i < 20; i++)
+    //     program_info_null.name[i] = 0;
+    // struct header_info header_info_null;
+    // header_info_null.sector = 0;
+    // header_info_null.byte_index = 0;
+    // program_info_null.shi = header_info_null;
+    // program_info_null.ehi = header_info_null;
+    //
+    // for (int i = 0; i < MAX_PROGRAM_COUNT; i++){
+    //     progloader_programs[i] = program_info_null;
+    // }
+    //
+    // progloader_program_count = 0;
 
 }

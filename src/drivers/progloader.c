@@ -6,7 +6,7 @@
 #include "../libs/programs.h"
 
 
-void progloader_load_program(int program_index, int address){
+void progloader_load_program(unsigned int program_index, int address){
     unsigned char* l_prog_load_addr = (unsigned char*)address;
     if (program_index < PROGLOADER_PROGRAM_COUNT && program_index >= 0){
         struct program_info program = PROGLOADER_PROGRAMS[program_index];
@@ -67,7 +67,7 @@ void progloader_load_program(int program_index, int address){
 }
 
 // Запуск программы
-int progloader_run(int program_index, int address){
+int progloader_run(unsigned int program_index, int address){
     if (program_index < PROGLOADER_PROGRAM_COUNT && program_index >= 0){
 
         // Print program name
@@ -81,6 +81,7 @@ int progloader_run(int program_index, int address){
         // (*io_display_cursor_pos_x)=0;
 
         // Load program from disk in memory
+
         progloader_load_program(program_index,address);
 
         // Run program
@@ -95,7 +96,7 @@ int progloader_run(int program_index, int address){
 }
 
 // Запуск программы
-int progloader_run_program(int program_index){
+int progloader_run_program(unsigned int program_index){
     int return_code = progloader_run(program_index, PROGRAM_ADDRESS);
     if (return_code == -1){
         print("This program is not found!");

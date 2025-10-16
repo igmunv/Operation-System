@@ -33,7 +33,7 @@
 //
 
 // Kernel
-#define EXECUTE_PROGRAM (*((int*)ADR_EXECUTE_PROGRAM))
+#define EXECUTE_PROGRAM (*((unsigned int*)ADR_EXECUTE_PROGRAM))
 
 // Keyboard
 #define KEYBOARD_BUFFER (((unsigned char*)ADR_KEYBOARD_BUFFER))
@@ -51,6 +51,6 @@
 
 // ProgLoader
 #define PROGLOADER_PROGRAMS (((struct program_info*)ADR_PROGLOADER_PROGRAMS)) // (struct program_info*)
-#define PROGLOADER_PROGRAM_COUNT (*((int*)ADR_PROGLOADER_PROGRAM_COUNT))
+#define PROGLOADER_PROGRAM_COUNT (*((unsigned int*)ADR_PROGLOADER_PROGRAM_COUNT))
 
 #endif
