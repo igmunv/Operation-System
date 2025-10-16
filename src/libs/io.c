@@ -1,4 +1,5 @@
 #include "io.h"
+#include "asm.h"
 #include "shared_memory.h"
 #include "string.h"
 

@@ -1,7 +1,12 @@
 #include "memory.h"
+#include "libs/programs.h"
+
+//
+// Shared memory
+//
 
 // Программа
-volatile unsigned int execute_program __attribute__((section(".os_data")));
+volatile int execute_program __attribute__((section(".os_data")));
 
 // Буфер клавиатуры и указатель-счётчик буфера
 volatile unsigned char keyboard_buffer[KEYBOARD_BUFFER_SIZE] __attribute__((section(".os_data")));
@@ -19,6 +24,12 @@ volatile unsigned short display_cursor_pos_y __attribute__((section(".os_data"))
 // Количество тиков с момента запуска
 volatile unsigned long ticks __attribute__((section(".os_data")));
 
+// Программы
+volatile struct program_info progloader_programs[MAX_PROGRAM_COUNT] __attribute__((section(".os_data")));
+
+// Количество программ
+volatile int progloader_program_count __attribute__((section(".os_data")));
+
 void shared_memory_init(){
     execute_program = 0;
 
@@ -35,4 +46,20 @@ void shared_memory_init(){
     display_cursor_pos_y = 0;
 
     ticks = 0;
+
+    struct program_info program_info_null;
+    for (int i = 0; i < 20; i++)
+        program_info_null.name[i] = 0;
+    struct header_info header_info_null;
+    header_info_null.sector = 0;
+    header_info_null.byte_index = 0;
+    program_info_null.shi = header_info_null;
+    program_info_null.ehi = header_info_null;
+
+    for (int i = 0; i < MAX_PROGRAM_COUNT; i++){
+        progloader_programs[i] = program_info_null;
+    }
+
+    progloader_program_count = 0;
+
 }

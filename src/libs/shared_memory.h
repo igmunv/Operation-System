@@ -33,7 +33,7 @@
 //
 
 // Kernel
-#define EXECUTE_PROGRAM (*((unsigned int*)ADR_EXECUTE_PROGRAM))
+#define EXECUTE_PROGRAM (*((int*)ADR_EXECUTE_PROGRAM))
 
 // Keyboard
 #define KEYBOARD_BUFFER (((unsigned char*)ADR_KEYBOARD_BUFFER))

@@ -36,17 +36,18 @@ const unsigned int multiboot_header[] = {
 __attribute__((section(".kernel_loop"))) void kernel_loop(void) {
 	while(1)
 	{
-
 		if (EXECUTE_PROGRAM == 0){
-			progloader_run_default();
+			progloader_run_program(EXECUTE_PROGRAM);
+		}
+
+		else if (EXECUTE_PROGRAM < 0){
+			return;
 		}
 
 		else{
 			progloader_run_program(EXECUTE_PROGRAM);
 			EXECUTE_PROGRAM = 0;
 		}
-
-		asm("hlt");
 	}
 }
 

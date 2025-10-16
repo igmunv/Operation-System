@@ -4,7 +4,7 @@ SECTIONS
 {
 
     /* Заголовок начала программы */
-    . = 0x40000;
+    . = 0x30000;
     .start_header : {
         *(.start_header)
     }

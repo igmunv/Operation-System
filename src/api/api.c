@@ -71,9 +71,8 @@ void api_ata_handler(){
 
 // Обработчик API прерывания запуска программы
 void api_execute_handler(){
+    EXECUTE_PROGRAM = get_ebx();
     outb(0x20, 0x20);
-    int program_index = get_ebx();
-    EXECUTE_PROGRAM = program_index;
 }
 
 // Регистрация API прерываний

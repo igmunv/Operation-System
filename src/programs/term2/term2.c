@@ -29,15 +29,15 @@ volatile char term_prompt_bckd_color = 0;
 volatile unsigned char term_pos_x_limit = 0;
 volatile unsigned char term_pos_y_limit = 0;
 
-
 // Commands
 unsigned char cmd_help[5] = "help";
 unsigned char cmd_progs[6] = "progs";
+unsigned char cmd_progsload[10] = "progsload";
 unsigned char cmd_clear[6] = "clear";
 unsigned char cmd_poweroff[9] = "poweroff";
 
 // Data for commands
-unsigned char* cmd_help_text = "Available commands:\n| [PROGRAM NAME] - run program\n| progs - view programs\n| clear - clear display\n| poweroff - shutdown system";
+unsigned char* cmd_help_text = "Available commands:\n| [PROGRAM NAME] - run program\n| progs - view programs\n| progsload - load programs from disk\n| clear - clear display\n| poweroff - shutdown system";
 
 
 // Чистим буффер терминала
@@ -58,7 +58,6 @@ void term_prompt(){
 
 // Обработчик команд
 void term_command_handler(){
-
     // Clear
     if (is_str_equally(&cmd_clear, &term_buffer)){
         io_clear();
@@ -78,9 +77,16 @@ void term_command_handler(){
         }
     }
 
+    // ProgsLoad
+    else if (is_str_equally(&cmd_progsload, &term_buffer)){
+        print("Load programs from disk...");
+        programs_load();
+        print("Completed!");
+    }
+
     // Poweroff
     else if (is_str_equally(&cmd_poweroff, &term_buffer)){
-        outw(0x604, 0x2000); // Only QEMU
+        EXECUTE_PROGRAM = -1;
     }
 
     // Other
@@ -115,7 +121,6 @@ void term_enter_key_handler(){
     if (EXECUTE_PROGRAM == 0){
         term_prompt();
     }
-
 }
 
 // Обработчик BackSpace
@@ -159,7 +164,6 @@ void term_scancode_handler(unsigned char scancode){
     else if (is_symbol_scancode(scancode)){
         term_symbol_key_handler(scancode);
     }
-
 }
 
 // Слушаем клавиатуру (буффер клавиатуры)
@@ -171,7 +175,7 @@ void term_keyboard_listen(){
     while(1){
 
         // Если появилась программа на исполнение
-        if (EXECUTE_PROGRAM > 0){
+        if (EXECUTE_PROGRAM != 0){
             return;
         }
 

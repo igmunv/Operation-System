@@ -1,6 +1,7 @@
 #ifndef INCL_LIB_PROGRAMS
 #define INCL_LIB_PROGRAMS
 
+#define MAX_PROGRAM_COUNT 256
 
 // Structs
 struct header_info{
@@ -20,5 +21,7 @@ void exit();
 // Запуск программы
 int program_run(int program_index);
 
+// Загрузка программ с диска
+void programs_load();
 
 #endif
