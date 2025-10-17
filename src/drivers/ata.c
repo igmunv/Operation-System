@@ -30,11 +30,12 @@ int ata_wait_ready() {
 }
 
 // Читаем данные с диска
-void ata_read(int word_count, unsigned char* buffer){
+void ata_read(int word_count, unsigned short* buffer){
     for (int i = 0; i < word_count; i++) {
         unsigned short word = inw(ATA_BASE);
-        buffer[i*2] = (word & 0xFF);
-        buffer[i*2 + 1] = (word >> 8) & 0xFF;
+        buffer[i] = word;
+        // buffer[i*2] = (word & 0xFF);
+        // buffer[i*2 + 1] = (word >> 8) & 0xFF;
     }
 }
 
@@ -85,9 +86,27 @@ int ata_driver_find_disks(){
         return -1;
     }
     else{
-        // Читаем IDENTIFY информацию с диска
-        unsigned char ident_buffer[512];
+        // Читаем IDENTIFY
+        unsigned short ident_buffer[256];
         ata_read(256, ident_buffer);
+
+        char model[19];
+
+        // Чтение модели из регистров 1-9
+        for (int i = 1; i <= 9; i++) {
+            model[(i-1)*2] = ident_buffer[i] & 0x00ff;         // Младший байт из регистра
+            model[(i-1)*2 + 1] = (ident_buffer[i] >> 8) & 0x00ff; // Старший байт из регистра
+        }
+
+        // Завершаем строку нулевым символом
+        model[18] = '\0';
+
+        unsigned int sector_count = (unsigned int)(ident_buffer[60] & 0x0000FFFF) | (unsigned int)((ident_buffer[61] << 16) & 0xFFFF0000);
+
+        if (sector_count <= 0){
+            return -1;
+        }
+
     }
 
     return 0;
@@ -125,12 +144,7 @@ int ata_driver_read_sector(unsigned int lba, unsigned char* buffer) {
 
     // Читаем 512 байт (один сектор)
 
-
-    for (int i = 0; i < 256; i++) { // делим так как читаем слова
-        unsigned short word = inw(ATA_BASE);
-        buffer[i*2] = (word & 0xFF);
-        buffer[i*2 + 1] = (word >> 8) & 0xFF;
-    }
+    ata_read(256, buffer);
 
     return 0;
 }
