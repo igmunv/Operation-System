@@ -1,11 +1,15 @@
 #ifndef INCL_LIB_ASM
 #define INCL_LIB_ASM
 
+#define cpu_pause() __asm__ __volatile__("pause" ::: "memory")
+
 // Полезные ASM функции
 extern void outb (unsigned short port, unsigned char byte);
 extern void outw(unsigned short port, unsigned short value);
 extern unsigned char inb (unsigned short port);
 extern unsigned short inw (unsigned short port);
+
+extern void in_out_wait(void);
 
 // Write in 8-bit registers
 extern void in_ah(unsigned char byte);

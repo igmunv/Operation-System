@@ -92,4 +92,6 @@ make_disk:
 	dd if=output/programs/colorama/colorama.bin of=output/disk.img bs=512 seek=40 conv=notrunc
 
 run:
-	qemu-system-i386 -no-reboot -cdrom output/os.iso -hda output/disk.img -monitor stdio
+	qemu-system-i386 -no-reboot -monitor stdio \
+	-drive file=output/disk.img,format=raw,if=ide,index=0,media=disk \
+	-drive file=output/os.iso,format=raw,if=ide,index=1,media=cdrom

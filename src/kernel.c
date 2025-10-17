@@ -11,7 +11,6 @@ const unsigned int multiboot_header[] = {
 #include "libs/string.h"
 #include "libs/time.h"
 #include "libs/io.h"
-#include "libs/ata.h"
 #include "libs/shared_memory.h"
 #include "libs/asm.h"
 
@@ -48,6 +47,38 @@ __attribute__((section(".kernel_loop"))) void kernel_loop(void) {
 }
 
 
+// For kernel logs
+// Without new line!
+void kernel_log(unsigned char* text){
+	for (short i = 0; text[i] != '\0'; i++)
+		display_print_symbol(text[i], DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, 7, 0);
+}
+
+
+// Panic Mode
+// where_function - в какой функции произошла ошибка
+// text - текст ошибки
+void kernel_panic(unsigned char* where_function, unsigned char* text){
+
+	// Выключаем прерывания
+	interrupt_disable();
+
+	DISPLAY_CURSOR_POS_X = 0;
+	DISPLAY_CURSOR_POS_Y = 0;
+	kernel_log(" - - Kernel Panic - - ");
+	display_new_line();
+
+	// Выводим текст напрямую через драйвер, так как прерывания в данный момент не безопасны
+	kernel_log(where_function);
+	kernel_log("(): ");
+	kernel_log(text);
+	display_new_line();
+
+	while(1) cpu_pause();
+
+}
+
+
 // Main
 void kmain(void){
 
@@ -76,4 +107,6 @@ void kmain(void){
 
 	// Endless loop
 	kernel_loop();
+
+	kernel_panic("kmain", "End");
 }

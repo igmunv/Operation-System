@@ -1,4 +1,4 @@
-global outb, outw, inb, inw
+global outb, outw, inb, inw, in_out_wait
 
 global in_ah, in_al, in_bh, in_bl, in_ch, in_cl, in_dh, in_dl
 global in_ax, in_bx, in_cx, in_dx, in_si
@@ -51,6 +51,12 @@ inw:
     in      ax, dx
     pop     ebp
     ret
+
+in_out_wait:
+    mov dx, 0x80
+    mov ax, 0
+    out dx, ax
+
 
 
 ; Write 8-bit registers

@@ -1,4 +1,5 @@
 #include "IDT_PIC.h"
+#include "libs/asm.h"
 
 // Главная структура: хранит обработчик для конкретного прерывания
 struct IDT_row
@@ -57,8 +58,6 @@ void interrupt_disable()
 }
 
 
-// Задержка, мини-ожидание
-static inline void io_wait(void){ outb(0x80, 0); }
 
 
 //  Инициализация PIC для того, чтобы наши прерывания не пересекались с прерываниями процессора
@@ -77,31 +76,31 @@ void PIC_remap(){
     // 0x11 = 00010001b
     // бит 4 (1) - начинаем инициализацию
     // бит 0 (1) - будет ICW4, жди ICW4:
-    outb(0x20, 0x11); io_wait(); // Master
-    outb(0xA0, 0x11); io_wait(); // Slave
+    outb(0x20, 0x11); in_out_wait(); // Master
+    outb(0xA0, 0x11); in_out_wait(); // Slave
 
 
     // ICW2: задаём базовые адреа вектора прерываний. Самое важное
     // PIC выдает CPU номера векторов (0-15)
     // нужно сказать с какого номера начинать:
     // Master: 0x20 (т.е IRQ0 = 0x20, IRQ1 = 0x21...):
-    outb(0x21, 0x20); io_wait();
+    outb(0x21, 0x20); in_out_wait();
     // Slave: 0x28 (т.е IRQ8 = 0x28, IRQ15 = 0x2F...):
-    outb(0xA1, 0x28); io_wait();
+    outb(0xA1, 0x28); in_out_wait();
 
 
     // ICW3: как master и slave соединены
     // Master: У меня есть Slave на линии IRQ2 (0x04 = 00000100. Т.е бит 2 (1) = IRQ2):
-    outb(0x21, 0x04); io_wait();
+    outb(0x21, 0x04); in_out_wait();
     // Slave: Я подключен к мастеру через IRQ2 (0x02 - номер линии - IRQ2):
-    outb(0xA1, 0x02); io_wait();
+    outb(0xA1, 0x02); in_out_wait();
 
     // ICW4: режим работы
     // Итого: работай в обычном 8086-совместимом режиме
     // Бит 0 = 1 - 8086/88 mode (совеременные CPU):
-    outb(0x21, 0x01); io_wait();
+    outb(0x21, 0x01); in_out_wait();
     // Бит 4 = 0 - не использовать "special fully nested mode":
-    outb(0xA1, 0x01); io_wait();
+    outb(0xA1, 0x01); in_out_wait();
 
 
     // Master: разрешаем только прерывания PIT (IRQ0) и клавиатуры (IRQ1)

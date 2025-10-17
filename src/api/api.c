@@ -1,4 +1,5 @@
 #include "api.h"
+#include "../drivers/ata.h"
 #include "../libs/shared_memory.h"
 
 // Обработчик API прерывания дисплея
@@ -63,7 +64,7 @@ void api_ata_handler(){
     if (command_type == 0){
         unsigned int lba = get_ebx();
         unsigned char* result = get_edx();
-        _ata_read_sector(lba, result);
+        ata_driver_read_sector(lba, result);
     }
 
     outb(0x20, 0x20);

@@ -4,6 +4,7 @@
 #include "progloader.h"
 #include "../libs/shared_memory.h"
 #include "../libs/programs.h"
+#include "../libs/ata.h"
 
 
 void progloader_load_program(unsigned int program_index, int address){
@@ -86,7 +87,9 @@ int progloader_run(unsigned int program_index, int address){
 
         // Run program
         int (*entry)() = (int(*)())(address+30);
+
         entry();
+
         return 0;
 
     }

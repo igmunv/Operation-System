@@ -1,5 +1,6 @@
 
 #include "drivers.h"
+#include "ata.h"
 #include "../IDT_PIC.h"
 
 // Обработчики прерываний на ASM
@@ -21,5 +22,13 @@ void drivers_init(){
 
 // Инициализация драйверов после включения прерываний
 void drivers_init_late(){
+
+    // Проверка подключен ли диск
+    if (ata_driver_find_disks() == -1){
+        // Нет, то паника
+        kernel_panic("drivers_init_late", "Not Found ATA Disk!");
+    }
+    // Если подключен то работа продолжается
+
     progloader_init();
 }
