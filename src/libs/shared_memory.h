@@ -2,6 +2,7 @@
 #define INCL_LIB_SHARED_MEMORY
 
 #include "programs.h"
+#include "../drivers/device.h"
 
 //
 // Address
@@ -28,6 +29,10 @@
 #define ADR_PROGLOADER_PROGRAMS 0x5020
 #define ADR_PROGLOADER_PROGRAM_COUNT 0x7420
 
+// Devices
+#define ADR_DEVICE_COUNT 0x7424
+#define ADR_DEVICES_INFO 0x7428
+
 //
 // Variables
 //
@@ -50,7 +55,11 @@
 #define TICKS (*((unsigned long*)ADR_TICKS))
 
 // ProgLoader
-#define PROGLOADER_PROGRAMS (((struct program_info*)ADR_PROGLOADER_PROGRAMS)) // (struct program_info*)
+#define PROGLOADER_PROGRAMS (((struct program_info*)ADR_PROGLOADER_PROGRAMS))
 #define PROGLOADER_PROGRAM_COUNT (*((unsigned int*)ADR_PROGLOADER_PROGRAM_COUNT))
+
+// Devices
+#define DEVICE_COUNT (*((unsigned int*)ADR_DEVICE_COUNT))
+#define DEVICES_INFO (*((struct dev_info*)ADR_DEVICES_INFO))
 
 #endif

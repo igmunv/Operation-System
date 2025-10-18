@@ -13,6 +13,7 @@ const unsigned int multiboot_header[] = {
 #include "libs/io.h"
 #include "libs/shared_memory.h"
 #include "libs/asm.h"
+#include "libs/memory.h"
 
 // Kernel
 #include "gdt.h"

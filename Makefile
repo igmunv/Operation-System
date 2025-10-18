@@ -38,9 +38,10 @@ build:
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/programs.c -o output/libs/programs.o
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/string.c -o output/libs/string.o
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/time.c -o output/libs/time.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/memory.c -o output/libs/memory.o
 
 	# Linker
-	i386-elf-ld -m elf_i386 -T src/linker.ld --oformat elf32-i386 -o output/kernel.elf output/asm/asm.o output/asm/IDT_handlers.o output/asm/gdt.o output/asm/api.o output/kernel.o output/IDT_PIC.o output/memory.o output/api/api.o output/drivers/ata.o output/drivers/display.o output/drivers/drivers.o output/drivers/keyboard.o output/drivers/PIT.o output/drivers/progloader.o output/libs/ata.o output/libs/io.o output/libs/programs.o output/libs/string.o output/libs/time.o
+	i386-elf-ld -m elf_i386 -T src/linker.ld --oformat elf32-i386 -o output/kernel.elf output/asm/asm.o output/asm/IDT_handlers.o output/asm/gdt.o output/asm/api.o output/kernel.o output/IDT_PIC.o output/memory.o output/api/api.o output/drivers/ata.o output/drivers/display.o output/drivers/drivers.o output/drivers/keyboard.o output/drivers/PIT.o output/drivers/progloader.o output/libs/ata.o output/libs/io.o output/libs/programs.o output/libs/string.o output/libs/time.o output/libs/memory.o
 
 build_programs:
 	mkdir -p ./output/programs/

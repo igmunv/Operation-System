@@ -63,10 +63,12 @@ int ata_driver_find_disks(){
         return -1; // timeout
     }
 
+    // IDENTIFY command
     outb(ATA_BASE + 7, 0xEC);
 
     ata_delay();
 
+    // Get status
     status = inb(ATA_BASE + 7);
 
     if (status == 0){
@@ -90,6 +92,7 @@ int ata_driver_find_disks(){
         unsigned short ident_buffer[256];
         ata_read(256, ident_buffer);
 
+        // Модель диска
         char model[19];
 
         // Чтение модели из регистров 1-9
@@ -101,9 +104,11 @@ int ata_driver_find_disks(){
         // Завершаем строку нулевым символом
         model[18] = '\0';
 
+        // Количество секторов на диске
         unsigned int sector_count = (unsigned int)(ident_buffer[60] & 0x0000FFFF) | (unsigned int)((ident_buffer[61] << 16) & 0xFFFF0000);
 
-        if (sector_count <= 0){
+        // Если у диска меньше 1 МБ памяти
+        if (sector_count < 2048){
             return -1;
         }
 
