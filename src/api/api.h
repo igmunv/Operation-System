@@ -1,15 +1,11 @@
 #ifndef INCL_API
 #define INCL_API
 
-// Обработчики прерываний на ASM
-extern void api_asm_display_handler();
-extern void api_asm_ata_handler();
-extern void api_asm_execute_handler();
+// Обработчик прерываний на ASM
+extern void api_asm_handler(void);
 
-// Обработчики прерываний на C
-void api_display_handler();
-void api_ata_handler();
-void api_execute_handler();
+// Обработчик прерываний на C
+unsigned int api_handler();
 
 void api_init();
 

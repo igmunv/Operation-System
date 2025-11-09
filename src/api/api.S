@@ -1,29 +1,17 @@
-global api_asm_display_handler, api_asm_ata_handler, api_asm_execute_handler
+global api_asm_handler
 
 ; C-обработчик прерываний
-extern api_display_handler, api_ata_handler, api_execute_handler
-
+extern api_handler
 
 section .text
 
-
-; Обработчик API прерываний дисплея
-api_asm_display_handler:
+; Обработчик API прерываний
+api_asm_handler:
     pusha
-    call api_display_handler ; C-handler
-    popa
-    iretd
-
-; Обработчик API прерываний ATA
-api_asm_ata_handler:
-    pusha
-    call api_ata_handler ; C-handler
-    popa
-    iretd
-
-; Обработчик API прерываний ATA
-api_asm_execute_handler:
-    pusha
-    call api_execute_handler ; C-handler
+    call api_handler ; C-handler
+    mov [esp + 0],  eax    ; ret EAX
+    mov [esp + 12], ebx    ; ret EBX
+    mov [esp + 4],  ecx    ; ret ECX
+    mov [esp + 8],  edx    ; ret EDX
     popa
     iretd
