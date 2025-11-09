@@ -2,7 +2,7 @@
 #define INCL_LIB_SHARED_MEMORY
 
 #include "programs.h"
-#include "../drivers/device.h"
+#include "device.h"
 
 //
 // Address

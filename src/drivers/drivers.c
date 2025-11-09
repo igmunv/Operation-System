@@ -32,3 +32,38 @@ void drivers_init_late(){
 
     progloader_init();
 }
+
+
+struct driver_info driver_get(struct dev_info* device){
+    /*
+
+    Драйвер просто инициализирует устройство, делает прерывания, и всё!
+
+    Здесь должен быть цикл который проходит по всем драйверам на диске
+    и ищет подходящий, но пока что этого нет
+
+    for ()
+        if equal:
+            ret driver
+    ret 0; // not found
+
+    */
+
+    if (device->classcode == STORAGE_CONTROLLER){
+        if (device->subclass == STORAGE_ATA_CONTROLLER){
+
+        }
+    }
+
+}
+
+
+void driver_manager(){
+
+    for (unsigned int device_index = 0; device_index < DEVICE_COUNT; device_index++){
+
+        struct driver_info driver = driver_get(&DEVICE_INFO[device_index]);
+
+    }
+
+}

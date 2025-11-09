@@ -27,6 +27,7 @@ const unsigned int multiboot_header[] = {
 #include "drivers/PIT.h"
 #include "drivers/ata.h"
 #include "drivers/progloader.h"
+#include "drivers/devices.h"
 
 // api
 #include "api/api.h"
@@ -102,6 +103,9 @@ void kmain(void){
 
 	// Ints enable
 	interrupt_enable();
+
+	devices_find();
+	driver_manager();
 
 	// Init after turning on ints
 	drivers_init_late();
