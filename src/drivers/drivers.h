@@ -10,7 +10,7 @@ struct driver_info {
     unsigned char subclass;
     unsigned char classcode;
 
-}
+};
 
 void drivers_init();
 void drivers_init_late();

@@ -2,6 +2,8 @@
 #include "drivers.h"
 #include "ata.h"
 #include "../IDT_PIC.h"
+#include "../libs/device.h"
+#include "../libs/shared_memory.h"
 
 // Обработчики прерываний на ASM
 extern void asm_tick_handler();
@@ -38,6 +40,10 @@ struct driver_info driver_get(struct dev_info* device){
     /*
 
     Драйвер просто инициализирует устройство, делает прерывания, и всё!
+    дальше уже он просто типо ждёт:
+    когда будет прерывание
+    либо когда юзер-space сделает syscall в ядро, а ядро уже вызовет драйвер
+    **он просто реагирует!**
 
     Здесь должен быть цикл который проходит по всем драйверам на диске
     и ищет подходящий, но пока что этого нет
@@ -62,7 +68,7 @@ void driver_manager(){
 
     for (unsigned int device_index = 0; device_index < DEVICE_COUNT; device_index++){
 
-        struct driver_info driver = driver_get(&DEVICE_INFO[device_index]);
+        struct driver_info driver = driver_get(&DEVICES_INFO[device_index]);
 
     }
 

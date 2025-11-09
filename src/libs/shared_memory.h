@@ -60,6 +60,6 @@
 
 // Devices
 #define DEVICE_COUNT (*((unsigned int*)ADR_DEVICE_COUNT))
-#define DEVICES_INFO (*((struct dev_info*)ADR_DEVICES_INFO))
+#define DEVICES_INFO (((struct dev_info*)ADR_DEVICES_INFO))
 
 #endif

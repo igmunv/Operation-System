@@ -104,8 +104,8 @@ void kmain(void){
 	// Ints enable
 	interrupt_enable();
 
-	devices_find();
-	driver_manager();
+	// devices_find();
+	// driver_manager();
 
 	// Init after turning on ints
 	drivers_init_late();
