@@ -1,0 +1,6 @@
+#ifndef INCL_API_SYSCALL_FUNC
+#define INCL_API_SYSCALL_FUNC
+
+
+
+#endif

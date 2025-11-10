@@ -1,6 +1,7 @@
 #include "api.h"
 #include "../drivers/ata.h"
 #include "../libs/shared_memory.h"
+#include "syscall_func.h"
 
 #include "../kernel.h"
 #include "../PIT.h"
@@ -91,88 +92,6 @@ struct syscall_result {
 };
 
 
-void sys_print_text(struct syscall_result* args, struct syscall_result* result){
-
-    // ищет текущую консоль
-
-}
-
-void sys_new_line(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_cursor_update(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_clear_display(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_current_symbol(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_delete_current_symbol(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_read_sector(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_write_sector(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_execute_program(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_execute_program(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_keyboard_buffer(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_keyboard_buffer_ptr(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_keyboard_shift_pressed(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_keyboard_ctrl_pressed(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_keyboard_alt_pressed(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_display_cursor_pos_x(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_display_cursor_pos_y(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_ticks(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_device_count(struct syscall_result* args, struct syscall_result* result){
-
-}
-
-void sys_get_device_info(struct syscall_result* args, struct syscall_result* result){
-
-}
-
 
 
 void api_handler(){
@@ -203,63 +122,83 @@ void api_handler(){
     struct syscall_result result;
 
     switch(syscall_number){
+
         case 0x0:
             sys_print_text(&args, &result);
             break;
+
         case 0x1:
             sys_new_line(&args, &result);
             break;
+
         case 0x2:
             sys_cursor_update(&args, &result);
             break;
+
         case 0x3:
             sys_clear_display(&args, &result);
             break;
+
         case 0x4:
             sys_get_current_symbol(&args, &result);
             break;
+
         case 0x5:
             sys_delete_current_symbol(&args, &result);
             break;
+
         case 0x10:
             sys_read_sector(&args, &result);
             break;
+
         case 0x11:
             sys_write_sector(&args, &result);
             break;
+
         case 0x50:
             sys_execute_program(&args, &result);
             break;
+
         case 0x100:
             sys_get_execute_program(&args, &result);
             break;
+
         case 0x101:
             sys_get_keyboard_buffer(&args, &result);
             break;
+
         case 0x102:
             sys_get_keyboard_buffer_ptr(&args, &result);
             break;
+
         case 0x103:
             sys_get_keyboard_shift_pressed(&args, &result);
             break;
+
         case 0x104:
             sys_get_keyboard_ctrl_pressed(&args, &result);
             break;
+
         case 0x105:
             sys_get_keyboard_alt_pressed(&args, &result);
             break;
+
         case 0x106:
             sys_get_display_cursor_pos_x(&args, &result);
             break;
+
         case 0x107:
             sys_get_display_cursor_pos_y(&args, &result);
             break;
+
         case 0x108:
             sys_get_ticks(&args, &result);
             break;
+
         case 0x109:
             sys_get_device_count(&args, &result);
             break;
+
         case 0x10A:
             sys_get_device_info(&args, &result);
             break;
