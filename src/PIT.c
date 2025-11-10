@@ -3,8 +3,8 @@
 #define PIT_INPUT_FREQ 1193182UL
 
 #include "PIT.h"
-#include "../libs/shared_memory.h"
 
+unsigned int TICKS = 0;
 
 // Инициализация таймера PIT
 void PIT_init(unsigned int freq_hz) {

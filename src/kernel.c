@@ -6,6 +6,8 @@ const unsigned int multiboot_header[] = {
 	-(0x1BADB002)
 };
 
+#include kernel.h
+#include "PIT.h"
 
 // libs
 #include "libs/string.h"
@@ -24,13 +26,15 @@ const unsigned int multiboot_header[] = {
 #include "drivers/drivers.h"
 #include "drivers/keyboard.h"
 #include "drivers/display.h"
-#include "drivers/PIT.h"
 #include "drivers/ata.h"
 #include "drivers/progloader.h"
 #include "drivers/devices.h"
 
 // api
 #include "api/api.h"
+
+
+unsigned int EXECUTE_PROGRAM = 0;
 
 
 // Loop

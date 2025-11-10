@@ -6,6 +6,8 @@
 // Информация о устройстве
 struct dev_info{
 
+    unsigned char is_pci_dev; // 0 or 1
+
     unsigned int bus;
     unsigned int dev;
     unsigned int func;

@@ -42,7 +42,7 @@
 | `0x107`  |    [get_display_cursor_pos_y](#get_display_cursor_pos_y)  |        Получить позицию курсора по координате Y |
 | `0x108`  |    [get_ticks](#get_ticks)  |                                      Получить количество тиков с момента запуска системы |
 | `0x109`  |    [get_device_count](#get_device_count)  |                        Получить количество устройств |
-| `0x10A`  |    [get_device_info](#get_device_info)  |                          Получить адрес массива |
+| `0x10A`  |    [get_device_info](#get_device_info)  |                          Получить адрес массива структур устройств |
 
 
 ## Системные вызовы

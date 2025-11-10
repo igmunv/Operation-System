@@ -158,6 +158,8 @@ void pci_config_set_command(unsigned int bus, unsigned int dev, unsigned int fun
 
 void pci_device_registration(unsigned int bus, unsigned int dev, unsigned int func, struct pci_dev_header dev_header){
 
+    DEVICES_INFO[DEVICE_COUNT].is_pci_dev = 1;
+
     DEVICES_INFO[DEVICE_COUNT].bus = bus;
     DEVICES_INFO[DEVICE_COUNT].dev = dev;
     DEVICES_INFO[DEVICE_COUNT].func = func;

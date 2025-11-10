@@ -2,6 +2,9 @@
 #include "../drivers/ata.h"
 #include "../libs/shared_memory.h"
 
+#include "../kernel.h"
+#include "../PIT.h"
+
 // Обработчик API прерывания дисплея
 void api_display_handler(){
 
@@ -76,34 +79,191 @@ void api_execute_handler(){
     outb(0x20, 0x20);
 }
 
+
 struct syscall_result {
     unsigned int eax;
     unsigned int ebx;
     unsigned int ecx;
     unsigned int edx;
+    unsigned int esi;
+    unsigned int edi;
+    unsigned int ebp;
 };
 
-void sys_print_text(){
+
+void sys_print_text(struct syscall_result* args, struct syscall_result* result){
+
+    // ищет текущую консоль
 
 }
 
-void sys_new_line(){
+void sys_new_line(struct syscall_result* args, struct syscall_result* result){
 
 }
+
+void sys_cursor_update(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_clear_display(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_current_symbol(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_delete_current_symbol(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_read_sector(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_write_sector(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_execute_program(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_execute_program(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_keyboard_buffer(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_keyboard_buffer_ptr(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_keyboard_shift_pressed(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_keyboard_ctrl_pressed(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_keyboard_alt_pressed(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_display_cursor_pos_x(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_display_cursor_pos_y(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_ticks(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_device_count(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+void sys_get_device_info(struct syscall_result* args, struct syscall_result* result){
+
+}
+
+
 
 void api_handler(){
 
-    unsigned int syscall_number = get_eax();
+    struct syscall_result args;
 
-    struct syscall_result r;
+    __asm__ volatile(
+        "movl %%eax, %0\n"
+        "movl %%ebx, %1\n"
+        "movl %%ecx, %2\n"
+        "movl %%edx, %3\n"
+        "movl %%esi, %4\n"
+        "movl %%edi, %5\n"
+        "movl %%ebp, %6\n"
+        : "=r"(args.eax),
+        "=r"(args.ebx),
+        "=r"(args.ecx),
+        "=r"(args.edx),
+        "=r"(args.esi),
+        "=r"(args.edi),
+        "=r"(args.ebp)
+        :
+        : "memory"
+    );
+
+    unsigned int syscall_number = args.eax;
+
+    struct syscall_result result;
 
     switch(syscall_number){
         case 0x0:
-            sys_print_text();
+            sys_print_text(&args, &result);
             break;
         case 0x1:
-            sys_new_line();
+            sys_new_line(&args, &result);
             break;
+        case 0x2:
+            sys_cursor_update(&args, &result);
+            break;
+        case 0x3:
+            sys_clear_display(&args, &result);
+            break;
+        case 0x4:
+            sys_get_current_symbol(&args, &result);
+            break;
+        case 0x5:
+            sys_delete_current_symbol(&args, &result);
+            break;
+        case 0x10:
+            sys_read_sector(&args, &result);
+            break;
+        case 0x11:
+            sys_write_sector(&args, &result);
+            break;
+        case 0x50:
+            sys_execute_program(&args, &result);
+            break;
+        case 0x100:
+            sys_get_execute_program(&args, &result);
+            break;
+        case 0x101:
+            sys_get_keyboard_buffer(&args, &result);
+            break;
+        case 0x102:
+            sys_get_keyboard_buffer_ptr(&args, &result);
+            break;
+        case 0x103:
+            sys_get_keyboard_shift_pressed(&args, &result);
+            break;
+        case 0x104:
+            sys_get_keyboard_ctrl_pressed(&args, &result);
+            break;
+        case 0x105:
+            sys_get_keyboard_alt_pressed(&args, &result);
+            break;
+        case 0x106:
+            sys_get_display_cursor_pos_x(&args, &result);
+            break;
+        case 0x107:
+            sys_get_display_cursor_pos_y(&args, &result);
+            break;
+        case 0x108:
+            sys_get_ticks(&args, &result);
+            break;
+        case 0x109:
+            sys_get_device_count(&args, &result);
+            break;
+        case 0x10A:
+            sys_get_device_info(&args, &result);
+            break;
+
     }
 
     outb(0x20, 0x20);
@@ -113,9 +273,18 @@ void api_handler(){
         "movl %1, %%ebx\n"
         "movl %2, %%ecx\n"
         "movl %3, %%edx\n"
+        "movl %4, %%esi\n"
+        "movl %5, %%edi\n"
+        "movl %6, %%ebp\n"
         :
-        : "r"(r.eax), "r"(r.ebx), "r"(r.ecx), "r"(r.edx)
-        : "eax", "ebx", "ecx", "edx"
+        : "r"(result.eax),
+        "r"(result.ebx),
+        "r"(result.ecx),
+        "r"(result.edx),
+        "r"(result.esi),
+        "r"(result.edi),
+        "r"(result.ebp)
+        : "eax", "ebx", "ecx", "edx", "esi", "edi", "ebp", "memory"
     );
 
 }
