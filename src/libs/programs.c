@@ -1,5 +1,4 @@
 #include "programs.h"
-#include "shared_memory.h"
 #include "ata.h"
 
 // Системный вызов запуска программы

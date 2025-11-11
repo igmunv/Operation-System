@@ -1,7 +1,9 @@
 #include "devices.h"
-#include "../libs/shared_memory.h"
 #include "../libs/device.h"
 #include "pci.h"
+
+
+struct dev_info DEVICES_INFO[256];
 
 
 void devices_registration(struct dev_info* device){

@@ -1,5 +1,4 @@
 #include "string.h"
-#include "shared_memory.h"
 
 // Возвращает символ (цифру), соответствующий цифре
 unsigned char itos_table(char i){

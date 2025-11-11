@@ -5,7 +5,6 @@
 #define KEYBOARD_ALT_SCANCODE 56
 
 #include "keyboard.h"
-#include "../libs/shared_memory.h"
 
 // Добавление сканн-кода в буфер клавиатуры (для последующего использования программами)
 void keyboard_scancode_add_in_buffer(unsigned char scancode){

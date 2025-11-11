@@ -3,7 +3,6 @@
 #include "ata.h"
 #include "../IDT_PIC.h"
 #include "../libs/device.h"
-#include "../libs/shared_memory.h"
 
 // Обработчики прерываний на ASM
 extern void asm_tick_handler();

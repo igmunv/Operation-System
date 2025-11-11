@@ -1,6 +1,5 @@
 #include "io.h"
 #include "asm.h"
-#include "shared_memory.h"
 #include "string.h"
 
 volatile unsigned char io_default_font_color = 7;

@@ -1,7 +1,6 @@
 #define VIDEO_BUFFER_PTR (0xb8000)
 
 #include "display.h"
-#include "../libs/shared_memory.h"
 
 
 // Нижний лимит по y

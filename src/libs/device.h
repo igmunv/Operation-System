@@ -7,6 +7,7 @@
 struct dev_info{
 
     unsigned char is_pci_dev; // 0 or 1
+    unsigned char is_virt_dev; // 0 or 1
 
     unsigned int bus;
     unsigned int dev;
@@ -42,6 +43,16 @@ struct dev_info{
     struct driver_info* driver;
 
 };
+
+
+enum virt_class_codes{
+    VIRT_DISPLAY_CONTROLLER                  = 0x0
+};
+
+enum virt_display_subclass{
+    VIRT_DISPLAY_VGATEXT                     = 0x0
+};
+
 
 enum class_codes{
     UNCLASSIFIED                        = 0x0,

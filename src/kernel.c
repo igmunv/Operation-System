@@ -6,21 +6,19 @@ const unsigned int multiboot_header[] = {
 	-(0x1BADB002)
 };
 
-#include kernel.h
+#include "kernel.h"
 #include "PIT.h"
 
 // libs
 #include "libs/string.h"
 #include "libs/time.h"
 #include "libs/io.h"
-#include "libs/shared_memory.h"
 #include "libs/asm.h"
 #include "libs/memory.h"
 
 // Kernel
 #include "gdt.h"
 #include "IDT_PIC.h"
-#include "memory.h"
 
 // drivers
 #include "drivers/drivers.h"
@@ -32,6 +30,7 @@ const unsigned int multiboot_header[] = {
 
 // api
 #include "api/api.h"
+#include "api/kernel_functions.h"
 
 
 unsigned int EXECUTE_PROGRAM = 0;
@@ -56,8 +55,7 @@ __attribute__((section(".kernel_loop"))) void kernel_loop(void) {
 // For kernel logs
 // Without new line!
 void kernel_log(unsigned char* text){
-	for (short i = 0; text[i] != '\0'; i++)
-		display_print_symbol(text[i], DISPLAY_CURSOR_POS_X, DISPLAY_CURSOR_POS_Y, 7, 0);
+
 }
 
 
@@ -69,8 +67,8 @@ void kernel_panic(unsigned char* where_function, unsigned char* text){
 	// Выключаем прерывания
 	interrupt_disable();
 
-	DISPLAY_CURSOR_POS_X = 0;
-	DISPLAY_CURSOR_POS_Y = 0;
+	/*set_display_cursor_pos_x(0);
+	_set_display_cursor_pos_y(0);
 	kernel_log(" - - Kernel Panic - - ");
 	display_new_line();
 
@@ -78,7 +76,7 @@ void kernel_panic(unsigned char* where_function, unsigned char* text){
 	kernel_log(where_function);
 	kernel_log("(): ");
 	kernel_log(text);
-	display_new_line();
+	display_new_line();*/
 
 	while(1) cpu_pause();
 
@@ -90,9 +88,6 @@ void kmain(void){
 
 	// GDT table init
 	gdt_init();
-
-	// Shared memory init
-	shared_memory_init();
 
 	// Ints disable
     interrupt_disable();

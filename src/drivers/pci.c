@@ -1,6 +1,5 @@
 #include "pci.h"
 #include "../libs/asm.h"
-#include "../libs/shared_memory.h"
 #include "../libs/device.h"
 
 unsigned short pci_config_read_word(unsigned int bus, unsigned int dev, unsigned int func, unsigned char offset){

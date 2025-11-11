@@ -2,7 +2,6 @@
 #define PROGRAM_ADDRESS 0x30000
 
 #include "progloader.h"
-#include "../libs/shared_memory.h"
 #include "../libs/programs.h"
 #include "../libs/ata.h"
 
