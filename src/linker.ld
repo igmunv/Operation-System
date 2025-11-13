@@ -3,27 +3,13 @@ ENTRY(kmain)
 SECTIONS
 {
 
-
   /* Для GRUB */
   .multiboot :{
     *(.multiboot)
   }
 
-
-  /* Специальная память | Special memory */
-    . = 0x5000;
-    .os_data : {
-        *(.os_data)
-    }
-
-    . = 0x10000;
-    .kernel_loop : {
-        *(.kernel_loop)
-    }
-
-
   /* Основной код и данные ОС */
-  . = 0x15000;
+  . = 0x10000;
   .text : {
     *(.text)
   }

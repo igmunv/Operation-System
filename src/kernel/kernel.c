@@ -20,14 +20,6 @@ const unsigned int multiboot_header[] = {
 #include "gdt.h"
 #include "IDT_PIC.h"
 
-// drivers
-#include "drivers/drivers.h"
-#include "drivers/keyboard.h"
-#include "drivers/display.h"
-#include "drivers/ata.h"
-#include "drivers/progloader.h"
-#include "drivers/devices.h"
-
 // api
 #include "api/api.h"
 #include "api/kernel_functions.h"

@@ -1,5 +1,5 @@
-#ifndef INCL_DRIVER_DEVICE
-#define INCL_DRIVER_DEVICE
+#ifndef INCL_LIB_DEVICE
+#define INCL_LIB_DEVICE
 
 #define MAX_DEVICE_COUNT 256
 
@@ -46,11 +46,16 @@ struct dev_info{
 
 
 enum virt_class_codes{
-    VIRT_DISPLAY_CONTROLLER                  = 0x0
+    VIRT_DISPLAY_CONTROLLER                  = 0x0,
+    VIRT_KEYBOARD_CONTROLLER                 = 0x1,
 };
 
 enum virt_display_subclass{
-    VIRT_DISPLAY_VGATEXT                     = 0x0
+    VIRT_DISPLAY_VGATEXT                     = 0x0,
+};
+
+enum virt_keyboard_subclass{
+    VIRT_KEYBOARD_LDEV                       = 0x0,
 };
 
 

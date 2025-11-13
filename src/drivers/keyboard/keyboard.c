@@ -5,6 +5,22 @@
 #define KEYBOARD_ALT_SCANCODE 56
 
 #include "keyboard.h"
+#include "../drivers.h"
+#include "../../api/kernel_functions.h"
+
+// ASM keyboard handler
+extern void asm_keyboard_handler();
+
+void* keyboard_funcs[] = {
+
+};
+
+unsigned char KEYBOARD_SHIFT_PRESSED = 0;
+unsigned char KEYBOARD_CTRL_PRESSED = 0;
+unsigned char KEYBOARD_ALT_PRESSED = 0;
+
+unsigned char KEYBOARD_BUFFER[KEYBOARD_BUFFER_SIZE];
+unsigned int KEYBOARD_BUFFER_PTR;
 
 // Добавление сканн-кода в буфер клавиатуры (для последующего использования программами)
 void keyboard_scancode_add_in_buffer(unsigned char scancode){
@@ -64,4 +80,12 @@ void keyboard_handler(){
         else keyboard_scancode_add_in_buffer(scancode);
     }
     outb(0x20, 0x20);
+}
+
+void keyboard_init(){
+
+
+    _int_reg_handler(33, 0x08, 0x80 | 0x0E, asm_keyboard_handler);
+
+
 }

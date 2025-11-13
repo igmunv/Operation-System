@@ -3,6 +3,7 @@
 #include "general_functions.h"
 
 #include "../libs/device.h"
+#include "../libs/driver.h"
 
 #include "../kernel.h"
 #include "../PIT.h"
@@ -138,7 +139,7 @@ unsigned int _get_ticks(){
 }
 
 unsigned int _get_device_count(){
-
+    return DEVICE_COUNT;
 }
 
 void _set_display_cursor_pos_x(unsigned char x, unsigned int device_index){

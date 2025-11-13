@@ -99,3 +99,11 @@ void sys_get_device_info(struct syscall_result* args, struct syscall_result* res
     void* devices = _get_device_info();
     result->eax = (unsigned int)devices;
 }
+
+void sys_set_display_cursor_pos_x(struct syscall_result* args, struct syscall_result* result){
+    _set_display_cursor_pos_x(result->ebx, result->ecx);
+}
+
+void sys_set_display_cursor_pos_y(struct syscall_result* args, struct syscall_result* result){
+    _set_display_cursor_pos_x(result->ebx, result->ecx);
+}

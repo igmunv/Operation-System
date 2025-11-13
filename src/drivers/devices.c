@@ -4,6 +4,7 @@
 
 
 struct dev_info DEVICES_INFO[256];
+unsigned int DEVICE_COUNT;
 
 
 void devices_registration(struct dev_info* device){

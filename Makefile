@@ -1,11 +1,57 @@
+
+
+DRIVER_DIRS := $(wildcard src/drivers/*)
+LIB_DIRS := $(wildcard src/libs/*.c)
+OBJS := $(shell find output/ -name '*.o')
+
+
 all:
 	$(MAKE) build
-	$(MAKE) build_programs
-	$(MAKE) make_iso
-	$(MAKE) make_disk
-	$(MAKE) run
+
+
+drivers:
+	@for dir in $(DRIVER_DIRS); do \
+		if [ -f $$dir/Makefile ]; then \
+			echo "==> Building driver in $$dir"; \
+			$(MAKE) -C $$dir; \
+		else \
+			echo "==> Skipping $$dir (no Makefile)"; \
+		fi; \
+	done
+
+
+libs:
+	mkdir -p output/libs
+	for src in $$(find src/libs -type f -name '*.c'); do \
+		obj=$$(echo $$src | sed 's|src/libs|output/libs|' | sed 's|\.c$$|.o|'); \
+		echo "Compiling $$src -> $$obj"; \
+		mkdir -p $$(dirname $$obj); \
+		i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c $$src -o $$obj; \
+	done
+
+	for src in $$(find src/libs -type f -name '*.S'); do \
+		obj=$$(echo $$src | sed 's|src/libs|output/asm|' | sed 's|\.S$$|.o|'); \
+		echo "Assembling $$src -> $$obj"; \
+		mkdir -p $$(dirname $$obj); \
+		nasm -f elf32 $$src -o $$obj; \
+	done
+
+
+kernel:
+
+
+
+link:
+	i386-elf-ld -m elf_i386 -T src/linker.ld --oformat elf32-i386 -o output/kernel.elf $(OBJS)
+
 
 build:
+	$(MAKE) drivers
+	$(MAKE) libs
+	$(MAKE) link
+
+
+build1:
 	mkdir -p ./output/
 	mkdir -p ./output/asm/
 	mkdir -p ./output/api/
@@ -41,44 +87,6 @@ build:
 	output/api/general_functions.o \
 	output/api/kernel_functions.o \
 	output/api/userspace_if.c \
-
-
-
-
-build_programs:
-	mkdir -p ./output/programs/
-	mkdir -p ./output/programs/term2/
-	mkdir -p ./output/programs/uptime/
-	mkdir -p ./output/programs/colorama/
-
-	# NASM
-	nasm -f elf32 src/libs/asm.S -o output/programs/asm.o
-
-	# |
-	# | Term2
-	# |
-
-	# C
-	i386-elf-gcc -w -m32 -ffreestanding -fno-pie -fno-pic -nostdlib -c src/programs/term2/term2.c -o output/programs/term2/term2.o
-	# Linker
-	i386-elf-ld -m elf_i386 -T src/programs/program_linker.ld -o output/programs/term2/term2.elf output/programs/asm.o output/programs/term2/term2.o output/libs/io.o output/libs/string.o output/libs/time.o output/libs/programs.o output/libs/ata.o
-	i386-elf-objcopy -O binary output/programs/term2/term2.elf output/programs/term2/term2.bin
-
-	# |
-	# | Uptime
-	# |
-
-	i386-elf-gcc -w -m32 -ffreestanding -fno-pie -fno-pic -nostdlib -c src/programs/uptime/uptime.c -o output/programs/uptime/uptime.o
-	i386-elf-ld -m elf_i386 -T src/programs/program_linker.ld -o output/programs/uptime/uptime.elf output/programs/asm.o output/programs/uptime/uptime.o output/libs/io.o output/libs/string.o
-	i386-elf-objcopy -O binary output/programs/uptime/uptime.elf output/programs/uptime/uptime.bin
-
-	# |
-	# | Colorama
-	# |
-
-	i386-elf-gcc -w -m32 -ffreestanding -fno-pie -fno-pic -nostdlib -c src/programs/colorama/colorama.c -o output/programs/colorama/colorama.o
-	i386-elf-ld -m elf_i386 -T src/programs/program_linker.ld -o output/programs/colorama/colorama.elf output/programs/asm.o output/programs/colorama/colorama.o output/libs/io.o output/libs/string.o output/libs/time.o
-	i386-elf-objcopy -O binary output/programs/colorama/colorama.elf output/programs/colorama/colorama.bin
 
 
 make_iso:

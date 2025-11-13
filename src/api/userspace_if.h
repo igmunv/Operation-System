@@ -43,4 +43,8 @@ void sys_get_device_count(struct syscall_result* args, struct syscall_result* re
 
 void sys_get_device_info(struct syscall_result* args, struct syscall_result* result);
 
+void sys_set_display_cursor_pos_x(struct syscall_result* args, struct syscall_result* result);
+
+void sys_set_display_cursor_pos_y(struct syscall_result* args, struct syscall_result* result);
+
 #endif
