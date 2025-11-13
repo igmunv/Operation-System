@@ -23,12 +23,17 @@ void drivers_init(){
 // Инициализация драйверов после включения прерываний
 void drivers_init_late(){
 
-    // Проверка подключен ли диск
-    if (ata_driver_find_disks() == -1){
-        // Нет, то паника
-        kernel_panic("drivers_init_late", "Not Found ATA Disk!");
-    }
-    // Если подключен то работа продолжается
+    // . Здесь должен быть поиск всех устройств по PCI
+    //   а уже потом их инициализация если устройство определённого типа есть
+
+    // Ищем диск и добавляем в устройства
+    ata_driver_find_master_disks();
+
+
+    fs_make(0);
+    fs_mount(0);
+
+
 
     progloader_init();
 }

@@ -1,4 +1,4 @@
-global outb, outw, inb, inw, in_out_wait
+global outb, outw, outl, inb, inw, inl, in_out_wait
 
 global in_ah, in_al, in_bh, in_bl, in_ch, in_cl, in_dh, in_dl
 global in_ax, in_bx, in_cx, in_dx, in_si
@@ -34,6 +34,17 @@ outw:
     pop     ebp
     ret
 
+outl:
+    push    ebp
+    mov     ebp, esp
+    ; [ebp+8] = port (16-bit)
+    ; [ebp+12] = byte (8-bit)
+    mov     dx, WORD [ebp+8]
+    mov     eax,  DWORD [ebp+12]
+    out     dx, eax
+    pop     ebp
+    ret
+
 inb:
     push    ebp
     mov     ebp, esp
@@ -49,6 +60,15 @@ inw:
     mov     dx, WORD [ebp+8]
     xor     eax, eax
     in      ax, dx
+    pop     ebp
+    ret
+
+inl:
+    push    ebp
+    mov     ebp, esp
+    mov     dx, WORD [ebp+8]
+    xor     eax, eax
+    in      eax, dx
     pop     ebp
     ret
 

@@ -1,6 +1,7 @@
 #include "memory.h"
 #include "libs/programs.h"
 #include "drivers/device.h"
+#include "drivers/file_system.h"
 
 //
 // Shared memory
@@ -35,6 +36,10 @@ volatile int progloader_program_count __attribute__((section(".os_data")));
 volatile unsigned int dev_count __attribute__((section(".os_data")));
 volatile struct dev_info devinfo[MAX_DEVICE_COUNT] __attribute__((section(".os_data")));
 
+// Файловая система
+volatile unsigned int file_system_is_mount_flag __attribute__((section(".file_system")));
+volatile struct dev_info* file_system_dev_info __attribute__((section(".file_system")));
+volatile struct fs_file_table* file_system_table[MAX_FILE_COUNT] __attribute__((section(".file_system")));
 
 
 
@@ -73,5 +78,8 @@ void shared_memory_init(){
 
     // Устройства
     dev_count = 0;
+
+    // Файловая система
+    file_system_is_mount_flag = 0;
 
 }

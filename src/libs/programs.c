@@ -28,6 +28,8 @@ void programs_load() {
 
     unsigned char data[512];
 
+    PROGLOADER_PROGRAM_COUNT =0;
+
     const int MAX_SECTOR_COUNT = 100;
     for (int sector = 0; sector < MAX_SECTOR_COUNT; sector++){
 

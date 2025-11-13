@@ -32,6 +32,8 @@ build:
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/keyboard.c -o output/drivers/keyboard.o
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/PIT.c -o output/drivers/PIT.o
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/progloader.c -o output/drivers/progloader.o
+	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/device.c -o output/drivers/device.o
+#	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/drivers/file_system.c -o output/drivers/file_system.o
 
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/ata.c -o output/libs/ata.o
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/io.c -o output/libs/io.o
@@ -41,7 +43,7 @@ build:
 	i386-elf-gcc -w -ffreestanding -m32 -fno-pie -nostdlib -c src/libs/memory.c -o output/libs/memory.o
 
 	# Linker
-	i386-elf-ld -m elf_i386 -T src/linker.ld --oformat elf32-i386 -o output/kernel.elf output/asm/asm.o output/asm/IDT_handlers.o output/asm/gdt.o output/asm/api.o output/kernel.o output/IDT_PIC.o output/memory.o output/api/api.o output/drivers/ata.o output/drivers/display.o output/drivers/drivers.o output/drivers/keyboard.o output/drivers/PIT.o output/drivers/progloader.o output/libs/ata.o output/libs/io.o output/libs/programs.o output/libs/string.o output/libs/time.o output/libs/memory.o
+	i386-elf-ld -m elf_i386 -T src/linker.ld --oformat elf32-i386 -o output/kernel.elf output/asm/asm.o output/asm/IDT_handlers.o output/asm/gdt.o output/asm/api.o output/kernel.o output/IDT_PIC.o output/memory.o output/api/api.o output/drivers/ata.o output/drivers/display.o output/drivers/drivers.o output/drivers/keyboard.o output/drivers/PIT.o output/drivers/progloader.o output/libs/ata.o output/libs/io.o output/libs/programs.o output/libs/string.o output/libs/time.o output/libs/memory.o output/drivers/device.o output/drivers/file_system.o
 
 build_programs:
 	mkdir -p ./output/programs/
@@ -86,13 +88,13 @@ make_iso:
 
 make_disk:
 	# Make hard disk
-	dd if=/dev/zero of=output/disk.img bs=512 count=20480
+	dd if=/dev/zero of=output/disk.img bs=512 count=32768
 	# Write programs on the disk
-	dd if=output/programs/term2/term2.bin of=output/disk.img bs=512 seek=0 conv=notrunc
+	dd if=output/programs/term2/term2.bin of=output/disk.img bs=512 seek=2 conv=notrunc
 	dd if=output/programs/uptime/uptime.bin of=output/disk.img bs=512 seek=20 conv=notrunc
 	dd if=output/programs/colorama/colorama.bin of=output/disk.img bs=512 seek=40 conv=notrunc
 
 run:
-	qemu-system-i386 -no-reboot -monitor stdio \
+	qemu-system-i386 -no-reboot -no-shutdown -monitor stdio \
 	-drive file=output/disk.img,format=raw,if=ide,index=0,media=disk \
 	-drive file=output/os.iso,format=raw,if=ide,index=1,media=cdrom

@@ -1,5 +1,5 @@
 #define MAX_PROGRAM_COUNT 256
-#define PROGRAM_ADDRESS 0x30000
+#define PROGRAM_ADDRESS 0x100000
 
 #include "progloader.h"
 #include "../libs/shared_memory.h"

@@ -27,9 +27,32 @@ const unsigned int multiboot_header[] = {
 #include "drivers/PIT.h"
 #include "drivers/ata.h"
 #include "drivers/progloader.h"
+#include "drivers/file_system.h"
 
 // api
 #include "api/api.h"
+
+
+struct multiboot_struct{
+	unsigned int flags;
+	unsigned int mem_lower;
+	unsigned int mem_upper;
+	unsigned int boot_device;
+	unsigned int cmdline;
+	unsigned int mods_count;
+	unsigned int mods_addr;
+	unsigned char syms[12];
+	unsigned int mmap_length;
+	unsigned int mmap_addr;
+	// Дальше не надо
+} __attribute__((packed));
+
+struct multiboot_mmap_struct {
+	unsigned int size;      // размер структуры, обычно 20
+	unsigned long addr;      // физический адрес начала области
+	unsigned long len;       // длина области в байтах
+	unsigned int type;      // тип области: 1 доступная (ram), 2 резерв, 3 acpi reclaimable, 4 acpi NVS, 5 bad memory (поврежденная)
+} __attribute__((packed));
 
 
 // Loop
@@ -79,12 +102,33 @@ void kernel_panic(unsigned char* where_function, unsigned char* text){
 
 }
 
+// Check System: memory, disks
+void check_system(){
+
+	// Devices
+	char disk_flag = 0;
+	for(int i = 0; i < DEVICE_COUNT; i++){
+		struct dev_info devinfo = DEVICES_INFO[i];
+
+		// Диск, размер больше 16 МБ
+		if (devinfo.dev_type == 1 && devinfo.option1 >= 32768){
+			disk_flag = 1;
+		}
+	}
+
+	if (!disk_flag) kernel_panic("check_system", "The drive was not found or does not meet the requirements!");
+}
+
 
 // Main
 void kmain(void){
 
 	// GDT table init
 	gdt_init();
+
+	// Get Multiboot Info
+	struct multiboot_struct* multiboot_info_addr = get_ebx();
+	struct multiboot_struct multiboot_info = *multiboot_info_addr;
 
 	// Shared memory init
 	shared_memory_init();
@@ -105,6 +149,9 @@ void kmain(void){
 
 	// Init after turning on ints
 	drivers_init_late();
+
+	// Check system: required: devices, disks, memory
+	check_system();
 
 	// Endless loop
 	kernel_loop();

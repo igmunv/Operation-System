@@ -6,8 +6,10 @@
 // Полезные ASM функции
 extern void outb (unsigned short port, unsigned char byte);
 extern void outw(unsigned short port, unsigned short value);
+extern void outl(unsigned short port, unsigned int value);
 extern unsigned char inb (unsigned short port);
 extern unsigned short inw (unsigned short port);
+extern unsigned int inl (unsigned short port);
 
 extern void in_out_wait(void);
 

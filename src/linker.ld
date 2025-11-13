@@ -41,6 +41,11 @@ SECTIONS
     *(COMMON)
   }
 
+  . = 0x30000;
+    .file_system : {
+        *(.file_system)
+    }
+
 
   /*
 
