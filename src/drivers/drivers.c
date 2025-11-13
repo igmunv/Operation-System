@@ -30,10 +30,6 @@ void drivers_init_late(){
     ata_driver_find_master_disks();
 
 
-    fs_make(0);
-    fs_mount(0);
-
-
 
     progloader_init();
 }
