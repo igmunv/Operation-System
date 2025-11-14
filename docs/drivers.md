@@ -1,35 +1,105 @@
 
-## Virt: VGA Text Mode
+драйвера должны иметь функцию init
+
+int init(struct dev_info*);
+
+## Display
 
 
-функции:
-funcs[0] - void print_text(unsigned char*, unsigned int, unsigned char, unsigned char, unsigned char, unsigned char)
-funcs[1] - void new_line(void)
-funcs[2] - void cursor_update(void)
-funcs[3] - void clear_display(void)
-funcs[4] - unsigned char get_current_symbol(unsigned int)
-funcs[5] - unsigned char delete_current_symbol(unsigned int)
+#### 0 - вывод текста
 
-funcs[6] - unsigned char get_display_cursor_pos_x(void)
-funcs[7] - unsigned char get_display_cursor_pos_y(void)
+```
+void print_text(unsigned char*, unsigned int, unsigned char, unsigned char, unsigned char, unsigned char)
+```
 
-funcs[8] - void set_display_cursor_pos_x(unsigned char)
-funcs[9] - void set_display_cursor_pos_y(unsigned char)
+#### 1 - новая строка
 
-должны иметь поля:
+```
+void new_line(void)
+```
 
-x
-y
+#### 2 - обновить курсор
+
+```
+void cursor_update(void)
+```
+
+#### 3 - очистить дисплей
+
+```
+void clear_display(void)
+```
+
+#### 4 - получить текущий символ (можно со смещением)
+
+```
+unsigned char get_current_symbol(unsigned int)
+```
+
+#### 5 - удалить текущий символ (можно со смещением)
+
+```
+unsigned char delete_current_symbol(unsigned int)
+```
+
+#### 6 - получить значение координаты X
+
+```
+unsigned char get_display_cursor_pos_x(void)
+```
+
+#### 7 - получить значение координаты Y
+
+```
+unsigned char get_display_cursor_pos_y(void)
+```
+
+#### 8 - установить значение координаты X
+
+```
+void set_display_cursor_pos_x(unsigned char)
+```
+
+#### 9 - установить значение координаты Y
+
+```
+void set_display_cursor_pos_y(unsigned char)
+```
 
 
-клавиатура
 
-поля:
-buffer
-buffer_ptr
-shift_pressed
-ctrl_pressed
-alt_pressed
+## Keyboard
+
+
+#### 0 - получить адрес буфера клавиатуры
+
+```
+void* get_keyboard_buffer(void)
+```
+
+#### 1 - получить индекс (текущее положение) буфера клавиатуры
+
+```
+unsigned int get_keyboard_buffer_ptr(void)
+```
+
+#### 2 - получить флаг: нажата ли клавиша shift
+
+```
+unsigned char get_keyboard_shift_pressed(void)
+```
+
+#### 3 - получить флаг: нажата ли клавиша ctrl
+
+```
+unsigned char get_keyboard_ctrl_pressed(void)
+```
+
+#### 4 - получить флаг: нажата ли клавиша alt
+
+```
+unsigned char get_keyboard_alt_pressed(void)
+```
 
 
 

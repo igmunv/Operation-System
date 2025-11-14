@@ -94,24 +94,39 @@ unsigned int _get_execute_program(){
     return EXECUTE_PROGRAM;
 }
 
-void* _get_keyboard_buffer(){
-
+void* _get_keyboard_buffer(unsigned int device_index){
+    struct dev_info* devices = _get_device_info();
+    struct dev_info* device = &devices[device_index];
+    void* (*get_keyboard_buffer)(void) = (void* (*)(void))(device->driver->funcs[GET_KEYBOARD_BUFFER]);
+    return get_keyboard_buffer();
 }
 
-unsigned int _get_keyboard_buffer_ptr(){
-
+unsigned int _get_keyboard_buffer_ptr(unsigned int device_index){
+    struct dev_info* devices = _get_device_info();
+    struct dev_info* device = &devices[device_index];
+    unsigned int (*get_keyboard_buffer_ptr)(void) = (unsigned int (*)(void))(device->driver->funcs[GET_KEYBOARD_BUFFER_PTR]);
+    return get_keyboard_buffer_ptr();
 }
 
-unsigned char _get_keyboard_shift_pressed(){
-
+unsigned char _get_keyboard_shift_pressed(unsigned int device_index){
+    struct dev_info* devices = _get_device_info();
+    struct dev_info* device = &devices[device_index];
+    unsigned int (*get_keyboard_shift_pressed)(void) = (unsigned int (*)(void))(device->driver->funcs[GET_KEYBOARD_SHIFT_PRD]);
+    return get_keyboard_shift_pressed();
 }
 
-unsigned char _get_keyboard_ctrl_pressed(){
-
+unsigned char _get_keyboard_ctrl_pressed(unsigned int device_index){
+    struct dev_info* devices = _get_device_info();
+    struct dev_info* device = &devices[device_index];
+    unsigned int (*get_keyboard_shift_pressed)(void) = (unsigned int (*)(void))(device->driver->funcs[GET_KEYBOARD_CTRL_PRD]);
+    return get_keyboard_shift_pressed();
 }
 
-unsigned char _get_keyboard_alt_pressed(){
-
+unsigned char _get_keyboard_alt_pressed(unsigned int device_index){
+    struct dev_info* devices = _get_device_info();
+    struct dev_info* device = &devices[device_index];
+    unsigned int (*get_keyboard_alt_pressed)(void) = (unsigned int (*)(void))(device->driver->funcs[GET_KEYBOARD_ALT_PRD]);
+    return get_keyboard_alt_pressed();
 }
 
 unsigned char _get_display_cursor_pos_x(unsigned int device_index){

@@ -1,6 +1,8 @@
 #ifndef INCL_LIB_DISPLAY
 #define INCL_LIB_DISPLAY
 
+extern struct dev_info;
+extern void* display_funcs[];
 
 void display_cursor_update();
 
@@ -13,6 +15,8 @@ void display_clear();
 unsigned char display_get_current_symbol(short offset);
 
 void display_delete_current_symbol(short offset);
+
+int display_init(struct dev_info* device);
 
 
 #endif

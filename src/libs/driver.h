@@ -30,4 +30,12 @@ enum dfunctype_virt_display_vgatext{
     SET_CURSOR_POS_Y,
 };
 
+enum dfunctype_virt_ps2_keyb{
+    GET_KEYBOARD_BUFFER,
+    GET_KEYBOARD_BUFFER_PTR,
+    GET_KEYBOARD_SHIFT_PRD,
+    GET_KEYBOARD_CTRL_PRD,
+    GET_KEYBOARD_ALT_PRD
+};
+
 #endif

@@ -4,14 +4,14 @@
 #include "../libs/driver.h"
 
 // - - Includes drivers - -
-#include "pci/pci.h"
 #include "ata/ata.h"
 #include "display/display.h"
 #include "keyboard/keyboard.h"
 
 // - - Driver list - -
 #define DRIVER_LIST \
-    X(keyboard_driver,   "keyboard.c", VIRT_KEYBOARD_CONTROLLER, VIRT_KEYBOARD_LDEV, keyboard_init, keyboard_funcs)
+    X(keyboard_driver,   "keyboard.c", VIRT_KEYBOARD_CONTROLLER, VIRT_KEYBOARD_LDEV, keyboard_init, keyboard_funcs) \
+    X(display_driver,   "display.c", VIRT_DISPLAY_CONTROLLER, VIRT_DISPLAY_VGATEXT, display_init, display_funcs)
 
 #define X(name, filename, subclass, classcode, init, funcs) { #name, filename, subclass, classcode, init, funcs },
 

@@ -31,6 +31,16 @@ void devices_legacy_find(){
 
     device_registration(&dev_keyb);
 
+    // display
+    struct dev_info dev_display;
+    dev_display.is_pci_dev = 0;
+    dev_display.is_virt_dev = 1;
+
+    dev_display.classcode = VIRT_DISPLAY_CONTROLLER;
+    dev_display.subclass = VIRT_DISPLAY_VGATEXT;
+
+    device_registration(&dev_display);
+
 
 }
 

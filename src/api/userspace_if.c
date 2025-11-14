@@ -51,27 +51,27 @@ void sys_get_execute_program(struct syscall_result* args, struct syscall_result*
 }
 
 void sys_get_keyboard_buffer(struct syscall_result* args, struct syscall_result* result){
-    void* buffer = _get_keyboard_buffer();
+    void* buffer = _get_keyboard_buffer(args->ebx);
     result->eax = (unsigned int)buffer;
 }
 
 void sys_get_keyboard_buffer_ptr(struct syscall_result* args, struct syscall_result* result){
-    unsigned int buffer_ptr = _get_keyboard_buffer_ptr();
+    unsigned int buffer_ptr = _get_keyboard_buffer_ptr(args->ebx);
     result->eax = buffer_ptr;
 }
 
 void sys_get_keyboard_shift_pressed(struct syscall_result* args, struct syscall_result* result){
-    unsigned char flag = _get_keyboard_shift_pressed();
+    unsigned char flag = _get_keyboard_shift_pressed(args->ebx);
     result->eax = (unsigned int)flag;
 }
 
 void sys_get_keyboard_ctrl_pressed(struct syscall_result* args, struct syscall_result* result){
-    unsigned char flag = _get_keyboard_ctrl_pressed();
+    unsigned char flag = _get_keyboard_ctrl_pressed(args->ebx);
     result->eax = (unsigned int)flag;
 }
 
 void sys_get_keyboard_alt_pressed(struct syscall_result* args, struct syscall_result* result){
-    unsigned char flag = _get_keyboard_alt_pressed();
+    unsigned char flag = _get_keyboard_alt_pressed(args->ebx);
     result->eax = (unsigned int)flag;
 }
 

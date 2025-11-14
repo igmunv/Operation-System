@@ -23,15 +23,15 @@ void _execute_program(unsigned int program);
 
 unsigned int _get_execute_program();
 
-void* _get_keyboard_buffer();
+void* _get_keyboard_buffer(unsigned int device_index);
 
-unsigned int _get_keyboard_buffer_ptr();
+unsigned int _get_keyboard_buffer_ptr(unsigned int device_index);
 
-unsigned char _get_keyboard_shift_pressed();
+unsigned char _get_keyboard_shift_pressed(unsigned int device_index);
 
-unsigned char _get_keyboard_ctrl_pressed();
+unsigned char _get_keyboard_ctrl_pressed(unsigned int device_index);
 
-unsigned char _get_keyboard_alt_pressed();
+unsigned char _get_keyboard_alt_pressed(unsigned int device_index);
 
 unsigned char _get_display_cursor_pos_x(unsigned int device_index);
 

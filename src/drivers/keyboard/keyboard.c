@@ -14,7 +14,11 @@
 extern void asm_keyboard_handler();
 
 void* keyboard_funcs[] = {
-
+    keyboard_get_buffer,
+    keyboard_get_buffer_ptr,
+    keyboard_get_shift_pressed,
+    keyboard_get_ctrl_pressed,
+    keyboard_get_alt_pressed
 };
 
 unsigned char KEYBOARD_SHIFT_PRESSED = 0;
@@ -82,6 +86,26 @@ void keyboard_handler(){
         else keyboard_scancode_add_in_buffer(scancode);
     }
     outb(0x20, 0x20);
+}
+
+void* keyboard_get_buffer(){
+    return KEYBOARD_BUFFER;
+}
+
+unsigned int keyboard_get_buffer_ptr(){
+    return KEYBOARD_BUFFER_PTR;
+}
+
+unsigned char keyboard_get_shift_pressed(){
+    return KEYBOARD_SHIFT_PRESSED;
+}
+
+unsigned char keyboard_get_ctrl_pressed(){
+    return KEYBOARD_CTRL_PRESSED;
+}
+
+unsigned char keyboard_get_alt_pressed(){
+    return KEYBOARD_ALT_PRESSED;
 }
 
 int keyboard_init(struct dev_info* device){

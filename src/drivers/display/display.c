@@ -2,10 +2,19 @@
 
 #include "display.h"
 
+void* display_funcs[] = {
+    display_print_symbol,
+    display_new_line,
+    display_cursor_update,
+    display_clear
+};
 
 // Нижний лимит по y
 const char display_limit_x_bottom = 79;
 const char display_limit_y_bottom = 24;
+
+unsigned char DISPLAY_CURSOR_POS_X;
+unsigned char DISPLAY_CURSOR_POS_Y;
 
 
 // Обновить курсор
@@ -98,4 +107,8 @@ void display_delete_current_symbol(short offset){
         DISPLAY_CURSOR_POS_X--;
         display_cursor_update();
     }
+}
+
+int display_init(struct dev_info* device){
+    return 1;
 }
