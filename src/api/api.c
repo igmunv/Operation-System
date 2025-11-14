@@ -2,6 +2,7 @@
 
 #include "api.h"
 #include "userspace_if.h"
+#include "kernel_functions.h"
 
 
 void api_handler(){
@@ -137,7 +138,7 @@ void api_handler(){
 // Регистрация API прерываний
 void api_registration_functions(){
     // Не забывай: IRQ всегда делает только маленькую и быструю работу
-    IDT_reg_handler(0x22, 0x08, 0x80 | 0x0E, api_asm_handler);
+    _int_reg_handler(0x22, 0x08, 0x80 | 0x0E, api_asm_handler);
 }
 
 

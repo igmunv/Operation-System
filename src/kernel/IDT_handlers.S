@@ -1,7 +1,7 @@
-global asm_tick_handler, asm_keyboard_handler
+global asm_tick_handler
 
 ; C-handlers
-extern tick_handler, keyboard_handler
+extern tick_handler
 
 section .text
 
@@ -12,9 +12,3 @@ asm_tick_handler:
     popa
     iretd
 
-; Keyboard interrupt handler
-asm_keyboard_handler:
-    pusha
-    call keyboard_handler ; C-handler
-    popa
-    iretd

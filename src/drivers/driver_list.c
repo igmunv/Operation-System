@@ -11,7 +11,7 @@
 
 // - - Driver list - -
 #define DRIVER_LIST \
-    X(keyboard_driver,   "keyboard/keyboard.c", VIRT_KEYBOARD_CONTROLLER, VIRT_KEYBOARD_LDEV, keyboard_init, keyboard_funcs)
+    X(keyboard_driver,   "keyboard.c", VIRT_KEYBOARD_CONTROLLER, VIRT_KEYBOARD_LDEV, keyboard_init, keyboard_funcs)
 
 #define X(name, filename, subclass, classcode, init, funcs) { #name, filename, subclass, classcode, init, funcs },
 

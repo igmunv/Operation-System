@@ -5,8 +5,8 @@
 #include "../libs/device.h"
 #include "../libs/driver.h"
 
-#include "../kernel.h"
-#include "../PIT.h"
+#include "../kernel/kernel.h"
+#include "../kernel/PIT.h"
 #include "../drivers/devices.h"
 #include "../drivers/drivers.h"
 

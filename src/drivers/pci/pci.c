@@ -1,6 +1,7 @@
 #include "pci.h"
-#include "../libs/asm.h"
-#include "../libs/device.h"
+#include "../devices.h"
+#include "../../libs/asm.h"
+#include "../../libs/device.h"
 
 unsigned short pci_config_read_word(unsigned int bus, unsigned int dev, unsigned int func, unsigned char offset){
 
@@ -49,9 +50,9 @@ void pci_config_write_word(unsigned int bus, unsigned int dev, unsigned int func
 }
 
 
-struct pci_dev_header pci_config_get_header(unsigned int bus, unsigned int dev, unsigned int func){
+struct pci_common_header pci_config_get_common_header(unsigned int bus, unsigned int dev, unsigned int func){
 
-    struct pci_dev_header header;
+    struct pci_common_header header;
 
     unsigned int vendor_device = pci_config_read_dword(bus, dev, func, 0x0);
     unsigned int command_status = pci_config_read_dword(bus, dev, func, 0x4);
@@ -96,6 +97,20 @@ struct pci_dev_header pci_config_get_header(unsigned int bus, unsigned int dev, 
 }
 
 
+struct pci_header_0 pci_config_get_header_0(unsigned int bus, unsigned int dev, unsigned int func){
+    struct pci_common_header common_header = pci_config_get_common_header(bus, dev, func);
+    struct pci_header_0 result;
+    result.common_header = common_header;
+    result.bar0 = pci_config_read_dword(bus, dev, func, 0x10);
+    result.bar1 = pci_config_read_dword(bus, dev, func, 0x14);
+    result.bar2 = pci_config_read_dword(bus, dev, func, 0x18);
+    result.bar3 = pci_config_read_dword(bus, dev, func, 0x1C);
+    result.bar4 = pci_config_read_dword(bus, dev, func, 0x20);
+    result.bar5 = pci_config_read_dword(bus, dev, func, 0x24);
+    return result;
+}
+
+
 struct pci_command_register pci_config_get_command(unsigned int bus, unsigned int dev, unsigned int func){
     unsigned short command = pci_config_read_word(bus, dev, func, 0x4);
 
@@ -137,7 +152,7 @@ struct pci_status_register pci_config_get_status(unsigned int bus, unsigned int 
 }
 
 
-void pci_config_set_command(unsigned int bus, unsigned int dev, unsigned int func, struct command_register cmd){
+void pci_config_set_command(unsigned int bus, unsigned int dev, unsigned int func, struct pci_command_register cmd){
     unsigned short cmd_binary = 0;
 
     cmd_binary |= (cmd.io_space & 0x1) << 0;
@@ -155,42 +170,45 @@ void pci_config_set_command(unsigned int bus, unsigned int dev, unsigned int fun
 }
 
 
-void pci_device_registration(unsigned int bus, unsigned int dev, unsigned int func, struct pci_dev_header dev_header){
+void pci_device_registration(unsigned int bus, unsigned int dev, unsigned int func, struct pci_header_0 header){
 
-    DEVICES_INFO[DEVICE_COUNT].is_pci_dev = 1;
+    struct dev_info device;
 
-    DEVICES_INFO[DEVICE_COUNT].bus = bus;
-    DEVICES_INFO[DEVICE_COUNT].dev = dev;
-    DEVICES_INFO[DEVICE_COUNT].func = func;
+    device.is_pci_dev = 1;
 
-    DEVICES_INFO[DEVICE_COUNT].vendor_id = dev_header.vendor_id;
-    DEVICES_INFO[DEVICE_COUNT].device_id = dev_header.device_id;
+    device.bus = bus;
+    device.dev = dev;
+    device.func = func;
 
-    DEVICES_INFO[DEVICE_COUNT].command = dev_header.command;
-    DEVICES_INFO[DEVICE_COUNT].status = dev_header.status;
+    device.vendor_id = header.common_header.vendor_id;
+    device.device_id = header.common_header.device_id;
 
-    DEVICES_INFO[DEVICE_COUNT].revision_id = dev_header.revision_id;
-    DEVICES_INFO[DEVICE_COUNT].prog_if = dev_header.prog_if;
+    device.command = header.common_header.command;
+    device.status = header.common_header.status;
 
-    DEVICES_INFO[DEVICE_COUNT].subclass = dev_header.subclass;
-    DEVICES_INFO[DEVICE_COUNT].classcode = dev_header.classcode;
+    device.revision_id = header.common_header.revision_id;
+    device.prog_if = header.common_header.prog_if;
 
-    DEVICES_INFO[DEVICE_COUNT].cache_line_size = dev_header.cache_line_size;
-    DEVICES_INFO[DEVICE_COUNT].latency_timer = dev_header.latency_timer;
+    device.subclass = header.common_header.subclass;
+    device.classcode = header.common_header.classcode;
 
-    DEVICES_INFO[DEVICE_COUNT].mf = dev_header.mf;
-    DEVICES_INFO[DEVICE_COUNT].header_type = dev_header.header_type;
+    device.cache_line_size = header.common_header.cache_line_size;
+    device.latency_timer = header.common_header.latency_timer;
 
-    DEVICES_INFO[DEVICE_COUNT].bist = dev_header.bist;
+    device.mf = header.common_header.mf;
+    device.header_type = header.common_header.header_type;
 
-    DEVICES_INFO[DEVICE_COUNT].bar0 = dev_header.bar0;
-    DEVICES_INFO[DEVICE_COUNT].bar1 = dev_header.bar1;
-    DEVICES_INFO[DEVICE_COUNT].bar2 = dev_header.bar2;
-    DEVICES_INFO[DEVICE_COUNT].bar3 = dev_header.bar3;
-    DEVICES_INFO[DEVICE_COUNT].bar4 = dev_header.bar4;
-    DEVICES_INFO[DEVICE_COUNT].bar5 = dev_header.bar5;
+    device.bist = header.common_header.bist;
 
-    DEVICE_COUNT++;
+    device.bar0 = header.bar0;
+    device.bar1 = header.bar1;
+    device.bar2 = header.bar2;
+    device.bar3 = header.bar3;
+    device.bar4 = header.bar4;
+    device.bar5 = header.bar5;
+
+    device_registration(&device);
+
 }
 
 
@@ -199,25 +217,25 @@ void pci_find_devices(){
         for (unsigned int dev = 0; dev < 32; dev++){
             for (unsigned int func = 0; func < 8; func++){
 
-                struct pci_dev_header dev_header = pci_config_get_header(bus, dev, func);
+                struct pci_common_header common_header = pci_config_get_common_header(bus, dev, func);
 
                 // Обрабатываем только устройства, без шин и т.д
-                if (dev_header.header_type != 0x0) continue;
+                if (common_header.header_type != 0x0) continue;
 
                 if (func == 0){
 
-                    if (dev_header.vendor_id == 0xFFFF) break; // Not found
+                    if (common_header.vendor_id == 0xFFFF) break; // Not found
 
-                    pci_device_registration(bus, dev, func, dev_header);
+                    pci_device_registration(bus, dev, func, pci_config_get_header_0(bus, dev, func));
 
-                    if (!dev_header.mf) break; // Not multifunction
+                    if (!common_header.mf) break; // Not multifunction
 
                 }
                 else{
 
-                    if (dev_header.vendor_id == 0xFFFF) continue; // Not found
+                    if (common_header.vendor_id == 0xFFFF) continue; // Not found
 
-                    pci_device_registration(bus, dev, func, dev_header);
+                    pci_device_registration(bus, dev, func, pci_config_get_header_0(bus, dev, func));
 
                 }
 

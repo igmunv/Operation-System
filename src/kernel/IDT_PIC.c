@@ -1,5 +1,5 @@
 #include "IDT_PIC.h"
-#include "libs/asm.h"
+#include "../libs/asm.h"
 
 // Главная структура: хранит обработчик для конкретного прерывания
 struct IDT_row
@@ -21,6 +21,10 @@ struct IDT_ptr
 // Инициализация структур
 struct IDT_row IDT_table[256];
 struct IDT_ptr IDT_desc;
+
+
+unsigned char IRQ_MASTER_MASK = 0xff;
+unsigned char IRQ_SLAVE_MASK = 0xff;
 
 // Регистрация прерывания
 void IDT_reg_handler(int number, unsigned short segm_sel, unsigned short flags, intr_handler handler)
@@ -58,10 +62,39 @@ void interrupt_disable()
 }
 
 
+void PIC_set_mask(unsigned char master, unsigned char slave){
+    outb(0x21, master);
+    outb(0xA1, slave);
+}
+
+
+// mst_sl - master или slave - 0: master - 1: slave
+// bit - какой бит
+// value - значение бита: 0 - 0, 1 - 1
+// Меняет бит в маске на 0 или 1
+void PIC_update_mask(unsigned char mst_sl, unsigned char bit, unsigned char value) {
+    if (mst_sl == 0) {
+        // Master
+        if (value)
+            IRQ_MASTER_MASK |= (1 << bit);   // ставим 1 - выключаем
+        else
+            IRQ_MASTER_MASK &= ~(1 << bit);  // ставим 0 - разрешаем
+    } else if (mst_sl == 1) {
+        // Slave
+        if (value)
+            IRQ_SLAVE_MASK |= (1 << bit); // ставим 1 - выключаем
+        else
+            IRQ_SLAVE_MASK &= ~(1 << bit); // ставим 0 - разрешаем
+    }
+
+    PIC_set_mask(IRQ_MASTER_MASK, IRQ_SLAVE_MASK);
+}
 
 
 //  Инициализация PIC для того, чтобы наши прерывания не пересекались с прерываниями процессора
 void PIC_remap(){
+
+    interrupt_disable();
 
     // IRQ - аппратная линия, по которому устройство может отправить прерывание
 
@@ -113,10 +146,11 @@ void PIC_remap(){
     // бит 2 — IRQ2  (1 → выключен)
     // бит 1 — IRQ1  (0 → включен)
     // бит 0 — IRQ0  (0 → включен)
-    outb(0x21, 0b11111100);
+    PIC_set_mask(0b11111111, 0xFF);
     // Slave: всё выключено
     // Расшифровка (1111111):
     // бит 0-7 — IRQ8-IRQ15 (1 - выключен)
-    outb(0xA1, 0xFF);
+
+    interrupt_enable();
 
 }

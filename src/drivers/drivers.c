@@ -1,5 +1,6 @@
 
 #include "drivers.h"
+#include "devices.h"
 #include "../libs/device.h"
 #include "../libs/driver.h"
 
@@ -10,28 +11,29 @@
 struct driver_info DRIVERS[MAX_DRIVER_COUNT];
 unsigned int DRIVER_COUNT;
 
-// Инициализация драйверов до включения прерываний
-void drivers_init(){
 
-    // Регистрация обработчиков для прерываний
-    IDT_reg_handler(32, 0x08, 0x80 | 0x0E, asm_tick_handler);
-    IDT_reg_handler(33, 0x08, 0x80 | 0x0E, asm_keyboard_handler);
-
-    // Инициализация устройств
-    PIT_init(1000);
-
+// Регистрация драйвера для конкретного устройства
+void driver_registration(struct driver_info* driver, struct dev_info* device){
+    device->driver = driver;
 }
 
 
+// Функция должна найти драйвера, и записать их в DRIVERS
 void drivers_find(){
+
+    // пока что берет просто из статического списка drivers,
+    // который собирается при компиляции
     DRIVER_COUNT = driver_count;
     for(int i = 0; i < DRIVER_COUNT; i++){
         DRIVERS[i] = drivers[i];
     }
+
 }
 
 
+// получает подходящий драйвер для устройства
 int driver_get(struct dev_info* device, struct driver_info* result){
+    //
     /*
     Драйвер просто инициализирует устройство, делает прерывания, и всё!
     дальше уже он просто типо ждёт:
@@ -43,8 +45,15 @@ int driver_get(struct dev_info* device, struct driver_info* result){
     for (unsigned int driver_index = 0; driver_index < DRIVER_COUNT; driver_index++){
         struct driver_info* driver = &DRIVERS[driver_index];
         if ((driver->classcode == device->classcode) && (driver->subclass == device->subclass)){
-            result = driver;
-            return 0;
+
+            int (*init)(struct dev_info*) = (int (*)(struct dev_info*))(driver->init);
+            int init_result = init(device);
+
+            if (init_result == 1){
+                result = driver;
+                return 0;
+            }
+
         }
     }
 

@@ -46,8 +46,8 @@ struct dev_info{
 
 
 enum virt_class_codes{
-    VIRT_DISPLAY_CONTROLLER                  = 0x0,
-    VIRT_KEYBOARD_CONTROLLER                 = 0x1,
+    VIRT_DISPLAY_CONTROLLER                  = 0x20,
+    VIRT_KEYBOARD_CONTROLLER                 = 0x21,
 };
 
 enum virt_display_subclass{

@@ -16,7 +16,7 @@ struct pci_command_register {
     char serr_enable;
     char fast_bk_to_bk_en;
     char int_disable;
-}
+};
 
 struct pci_status_register {
     char int_status;
@@ -30,9 +30,9 @@ struct pci_status_register {
     char received_mast_abort;
     char sign_sys_err;
     char detect_par_err;
-}
+};
 
-struct pci_dev_header{
+struct pci_common_header{
     unsigned short vendor_id;
     unsigned short device_id;
     unsigned short command;
@@ -46,7 +46,17 @@ struct pci_dev_header{
     unsigned char mf;
     unsigned char header_type;
     unsigned char bist;
-}
+};
+
+struct pci_header_0{
+    struct pci_common_header common_header;
+    unsigned int bar0;
+    unsigned int bar1;
+    unsigned int bar2;
+    unsigned int bar3;
+    unsigned int bar4;
+    unsigned int bar5;
+};
 
 
 unsigned short pci_config_read_word(unsigned int bus, unsigned int dev, unsigned int func, unsigned char offset);
@@ -59,7 +69,7 @@ struct pci_command_register pci_config_get_command(unsigned int bus, unsigned in
 
 struct pci_status_register pci_config_get_status(unsigned int bus, unsigned int dev, unsigned int func);
 
-void pci_config_set_command(unsigned int bus, unsigned int dev, unsigned int func, struct command_register cmd);
+void pci_config_set_command(unsigned int bus, unsigned int dev, unsigned int func, struct pci_command_register cmd);
 
 void pci_find_devices();
 
