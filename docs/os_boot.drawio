@@ -1,0 +1,94 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="kM4jHzb8LTY4r58NocKx">
+    <mxGraphModel dx="1426" dy="867" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-9" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="280" width="120" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-2" target="AJbJb2_0u7n3c7cs4hzC-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-2" value="GRUB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#808080;" vertex="1" parent="1">
+          <mxGeometry x="160" y="480" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-3" target="AJbJb2_0u7n3c7cs4hzC-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-3" value="GDT init" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="180" y="380" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-4" target="AJbJb2_0u7n3c7cs4hzC-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-4" value="PIC remap" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="180" y="340" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-6" target="AJbJb2_0u7n3c7cs4hzC-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-6" value="API init" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="180" y="300" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-8" target="AJbJb2_0u7n3c7cs4hzC-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-8" target="AJbJb2_0u7n3c7cs4hzC-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-8" value="Devices Find" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6FFCC;" vertex="1" parent="1">
+          <mxGeometry x="180" y="200" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-10" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;Base Init&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="280" width="40" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-12" target="AJbJb2_0u7n3c7cs4hzC-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-12" target="AJbJb2_0u7n3c7cs4hzC-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-12" value="Driver Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6FFCC;" vertex="1" parent="1">
+          <mxGeometry x="180" y="120" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-18" target="AJbJb2_0u7n3c7cs4hzC-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-18" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFCCCC;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="210" y="430" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-21" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;entry point - kmain&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="240" y="435" width="70" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-23" value="Scheduler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCCCC;" vertex="1" parent="1">
+          <mxGeometry x="180" y="40" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-25" target="AJbJb2_0u7n3c7cs4hzC-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-25" value="virtual devices registration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="280" y="210" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-26" target="AJbJb2_0u7n3c7cs4hzC-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-26" value="legacy devices find and reg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="450" y="210" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-27" value="pci devices find and registration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="620" y="210" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AJbJb2_0u7n3c7cs4hzC-31" target="AJbJb2_0u7n3c7cs4hzC-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-31" value="drivers find" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="280" y="130" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJbJb2_0u7n3c7cs4hzC-33" value="get and registration drivers for devices" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6E6E6;" vertex="1" parent="1">
+          <mxGeometry x="370" y="130" width="220" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
