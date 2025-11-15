@@ -13,7 +13,7 @@
     X(keyboard_driver,   "keyboard.c", VIRT_KEYBOARD_CONTROLLER, VIRT_KEYBOARD_LDEV, keyboard_init, keyboard_funcs) \
     X(display_driver,   "display.c", VIRT_DISPLAY_CONTROLLER, VIRT_DISPLAY_VGATEXT, display_init, display_funcs)
 
-#define X(name, filename, subclass, classcode, init, funcs) { #name, filename, subclass, classcode, init, funcs },
+#define X(name, filename, classcode, subclass, init, funcs) { #name, filename, classcode, subclass, init, funcs },
 
 struct driver_info drivers[] = {
     DRIVER_LIST
@@ -22,7 +22,7 @@ struct driver_info drivers[] = {
 
 #undef X
 
-#define X(name, filename, subclass, classcode, init, funcs) +1
+#define X(name, filename, classcode, subclass, init, funcs) +1
 const unsigned int driver_count = 0 DRIVER_LIST;
 
 #undef X

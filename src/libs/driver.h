@@ -12,7 +12,7 @@ struct driver_info {
     unsigned char subclass;
 
     void* init;
-    void* funcs[DRIVER_FUNC_COUNT];
+    void** funcs;
 
 };
 

@@ -31,8 +31,8 @@ void drivers_find(){
 }
 
 
-// получает подходящий драйвер для устройства
-int driver_get(struct dev_info* device, struct driver_info* result){
+// получает подходящий драйвер для устройства. сразу проверяет через init
+int driver_get(struct dev_info* device, struct driver_info** result){
     //
     /*
     Драйвер просто инициализирует устройство, делает прерывания, и всё!
@@ -50,7 +50,7 @@ int driver_get(struct dev_info* device, struct driver_info* result){
             int init_result = init(device);
 
             if (init_result == 1){
-                result = driver;
+                *result = driver;
                 return 0;
             }
 
@@ -68,8 +68,10 @@ void driver_manager(){
 
     for (unsigned int device_index = 0; device_index < DEVICE_COUNT; device_index++){
 
-        struct driver_info driver;
-        driver_get(&DEVICES_INFO[device_index], &driver);
+        struct driver_info* driver;
+        int dr_get_result = driver_get(&DEVICES_INFO[device_index], &driver);
+        if (dr_get_result == 0)
+            driver_registration(driver, &DEVICES_INFO[device_index]);
 
     }
 
